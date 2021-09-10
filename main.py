@@ -7,7 +7,7 @@ from discord.ext import tasks
 
 dateFormat = "%Y-%m-%d %H:%M"
 
-@tasks.loop(minutes = 0.1)
+@tasks.loop(minutes = 1)
 async def check_for_announcement():
     agenda = json.load(open('agenda.json'))
     messageChannel = client.get_channel(int(config('ANNOUNCEMENT_CHANNEL_ID')))
