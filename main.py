@@ -34,7 +34,7 @@ class Client(discord.Client):
             return
 
         elif message.content.startswith('!hello'):
-            await message.channel.send('Hello!')
+            await message.channel.send(f'Hello {message.author.mention}!')
         
         elif message.content.startswith('!agenda'):
             agenda = json.load(open(config("AGENDA_FILE_NAME")))
@@ -65,19 +65,6 @@ class Client(discord.Client):
             embed.add_field(name="!help", value="Shows available commands", inline=False)
 
             await message.channel.send(embed=embed)
-
-    async def on_member_join(self, member):
-        guest = discord.utils.get(member.guild.roles, name="Guest")
-        await member.add_roles(guest)
-
-    async def on_raw_reaction_add(self, payload):
-        #Add roles after reaction to specific message
-        if payload.message_id != int(config('MESSAGE_ID')):
-            return
-        if str(payload.emoji) == '❤️':
-            print('czerwone')
-        elif str(payload.emoji) == '💙':
-            print('niebieskie')
 
 # Start execution
 print("Starting the bot...")
