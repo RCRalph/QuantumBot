@@ -9,21 +9,23 @@ dateFormat, color = "%Y-%m-%d %H:%M", 0x7845d1
 
 @aiocron.crontab("* * * * *")
 async def check_for_announcement():
-    agenda = json.load(open(config("AGENDA_FILE_NAME")))
-    messageChannel = client.get_channel(int(config('ANNOUNCEMENT_CHANNEL_ID')))
-    currentDate = datetime.datetime.now()
+    agenda = json.load(open(config("SCHEDULES_FILE_NAME")))
 
-    for i in agenda:
-        startDate = datetime.datetime.strptime(i["start"], dateFormat)
-        if (currentDate.strftime(dateFormat) == startDate.strftime(dateFormat)):
-            embed = discord.Embed(title="Reminder!", color=color)
+    for j in agenda:
+        messageChannel = client.get_channel(j["channel_id"])
+        currentDate = datetime.datetime.now()
 
-            startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
-            endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
-            embed.add_field(name=i["title"], value=f"{startHour} - {endHour}", inline=False)
+        for i in j["schedule"]:
+            startDate = datetime.datetime.strptime(i["start"], dateFormat)
+            if (currentDate.strftime(dateFormat) == startDate.strftime(dateFormat)):
+                embed = discord.Embed(title="Reminder!", color=color)
 
-            await messageChannel.send(embed=embed)
-            print("Sent announcement message")
+                startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
+                endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
+                embed.add_field(name=i["title"], value=f"{startHour} - {endHour}", inline=False)
+
+                await messageChannel.send(embed=embed)
+                print(f"Sent announcement message: {i['title']}")
 
 class Client(discord.Client):
     async def on_ready(self):
@@ -37,32 +39,37 @@ class Client(discord.Client):
             await message.channel.send(f'Hello {message.author.mention}!')
         
         elif message.content.startswith('!agenda'):
-            agenda = json.load(open(config("AGENDA_FILE_NAME")))
-            currentDate = datetime.datetime.today()
+            agenda = json.load(open(config("SCHEDULES_FILE_NAME")))
+            serverID = message.guild.id
 
-            todaysAgenda = []
-            for i in agenda:
-                startDate = datetime.datetime.strptime(i["start"], dateFormat)
-                if (startDate.strftime("%Y-%m-%d") == currentDate.strftime("%Y-%m-%d")):
-                    todaysAgenda.append(i)
-            
-            if (todaysAgenda):
-                embed = discord.Embed(title="Agenda ({})".format(currentDate.strftime("%Y-%m-%d")), color=color)
-                for i in todaysAgenda:
-                    startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
-                    endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
-                    embed.add_field(name=i["title"], value=f"{startHour} - {endHour}", inline=False)
-            else:
-                embed = discord.Embed(title="Agenda doesn't exist for the current day!", color=color)
+            for j in agenda:
+                if (j["server_id"] == serverID):
+                    currentDate = datetime.datetime.today()
 
-            await message.channel.send(embed=embed)
+                    todaysAgenda = []
+                    for i in j["schedule"]:
+                        startDate = datetime.datetime.strptime(i["start"], dateFormat)
+                        if (startDate.strftime("%Y-%m-%d") == currentDate.strftime("%Y-%m-%d")):
+                            todaysAgenda.append(i)
+                    
+                    if (todaysAgenda):
+                        embed = discord.Embed(title="Agenda ({})".format(currentDate.strftime("%Y-%m-%d")), color=color)
+                        for i in todaysAgenda:
+                            startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
+                            endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
+                            embed.add_field(name=i["title"], value=f"{startHour} - {endHour}", inline=False)
+                    else:
+                        embed = discord.Embed(title="Today's agenda is empty!", color=color)
+
+                    await message.channel.send(embed=embed)
+                    break                    
         
         elif message.content.startswith('!help'):
             embed = discord.Embed(title='Available Commands', color=color)
 
-            embed.add_field(name="!hello", value="Welcomes the user.", inline=False)
-            embed.add_field(name="!agenda", value="Shows agenda for the current day", inline=False)
             embed.add_field(name="!help", value="Shows available commands", inline=False)
+            embed.add_field(name="!hello", value="Greets the user.", inline=False)
+            embed.add_field(name="!agenda", value="Shows today's agenda", inline=False)
 
             await message.channel.send(embed=embed)
 

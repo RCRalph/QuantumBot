@@ -1,0 +1,43 @@
+[
+    {
+        "server_id": 872134154744111155,
+        "channel_id": 872134154744111158,
+        "schedule": [
+            {
+                "title": "Paweł Gora - Wprowadzenie",
+                "start": "2021-09-20 17:30",
+                "end": "2021-09-20 18:30"
+            },
+            {
+                "title": "Aleksandra Lipińska - Wykład",
+                "start": "2021-09-20 19:00",
+                "end": "2021-09-20 21:00"
+            },
+            {
+                "title": "Aleksandra Lipińska - Wykład",
+                "start": "2021-09-21 17:30",
+                "end": "2021-09-21 19:30"
+            },
+            {
+                "title": "Jakub Leśkiewicz - Wykład z matematyki",
+                "start": "2021-09-21 19:30",
+                "end": "2021-09-21 21:00"
+            },
+            {
+                "title": "Aleksandra Lipińska - Wykład",
+                "start": "2021-09-22 17:30",
+                "end": "2021-09-22 19:30"
+            },
+            {
+                "title": "Aleksandra Lipińska - Wykład",
+                "start": "2021-09-23 17:30",
+                "end": "2021-09-23 19:30"
+            },
+            {
+                "title": "Aleksandra Lipińska - Wykład",
+                "start": "2021-09-24 17:30",
+                "end": "2021-09-24 19:30"
+            }
+        ] 
+    }
+]
