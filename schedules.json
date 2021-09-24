@@ -39,5 +39,61 @@
                 "end": "2021-09-24 19:30"
             }
         ] 
+    },
+    {
+        "server_id": 866299641526878238,
+        "channel_id": 866302518531194940,
+        "schedule": [
+            {
+                "title": "Start of the Hackathon, Kick-off lecture (Paweł Gora)",
+                "start": "2021-09-25 12:00",
+                "end": "2021-09-25 13:00"
+            },
+            {
+                "title": "Match-making event (Aleksandra Lipińska)",
+                "start": "2021-09-25 13:00",
+                "end": "2021-09-25 14:00"
+            },
+            {
+                "title": "Entangle your fun with Qiskit - games world in IBM Q (Piotr Biskupski)",
+                "start": "2021-09-25 14:00",
+                "end": "2021-09-25 15:00"
+            },
+            {
+                "title": "Yet another invitation to Quantum Game Theory",
+                "start": "2021-09-25 15:00",
+                "end": "2021-09-25 16:00"
+            },
+            {
+                "title": "Create your first quantum game in JavaScript - workshop (Piotr Migdał)",
+                "start": "2021-09-25 17:00",
+                "end": "2021-09-25 19:00"
+            },
+            {
+                "title": "Accessibility in games (Artur Roszczyk)",
+                "start": "2021-09-26 12:00",
+                "end": "2021-09-26 13:00"
+            },
+            {
+                "title": "Linear algebra is actually a fun videogame: Quantum Odyssey (Laurentiu Nita)",
+                "start": "2021-09-26 14:00",
+                "end": "2021-09-26 15:00"
+            },
+            {
+                "title": "Designing interfaces for quantum experiences (Klem Jankiewicz)",
+                "start": "2021-09-26 17:00",
+                "end": "2021-09-26 18:00"
+            },
+            {
+                "title": "Mapping the Landscape of Quantum Games (Anant Sharma & Anamaría García)",
+                "start": "2021-09-26 12:00",
+                "end": "2021-09-26 13:00"
+            },
+            {
+                "title": "One hour left until deadline",
+                "start": "2021-10-03 11:00",
+                "end": "2021-10-03 12:00"
+            }
+        ]
     }
 ]
