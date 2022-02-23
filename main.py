@@ -60,10 +60,10 @@ class Client(discord.Client):
                         date = datetime.datetime.strptime(i["start"], dateFormat).strftime("%Y-%m-%d")
                         startHour = datetime.datetime.strptime(i["start"], dateFormat).replace(tzinfo=pytz.utc)
                         endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
-                        embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
+                        embed.add_field(name=i["title"], value=f"{date}: {getTimesString(startHour, endHour, j['timezones'])}", inline=False)
 
                     await message.channel.send(embed=embed)
-                break
+                    break
         
         elif message.content.startswith('!agenda'):
             agenda = json.load(open(config("SCHEDULES_FILE_NAME")))
