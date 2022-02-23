@@ -86,6 +86,8 @@ class Client(discord.Client):
             embed.add_field(name="!help", value="Shows available commands", inline=False)
             embed.add_field(name="!hello", value="Greets the user.", inline=False)
             embed.add_field(name="!agenda", value="Shows today's agenda", inline=False)
+            embed.add_field(name="!agenda-full", value="Shows full agenda", inline=False)
+
 
             await message.channel.send(embed=embed)
 
