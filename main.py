@@ -2,10 +2,21 @@ import discord
 import datetime
 import json
 import aiocron
+import pytz
 
 from decouple import config
 
 dateFormat, color = "%Y-%m-%d %H:%M", 0x7845d1
+
+def getTimesString(startHourUTC, endHourUTC, timezones):
+    retStr = ""
+    for i, item in enumerate(timezones):
+        startHour = startHourUTC.astimezone(pytz.timezone(item)).strftime("%H:%M")
+        endHour = endHourUTC.astimezone(pytz.timezone(item)).strftime("%H:%M")
+        retStr += f"{startHour} - {endHour} {item}"
+        if (i < len(timezones) - 1):
+            retStr += " | "
+    return retStr
 
 @aiocron.crontab("* * * * *")
 async def check_for_announcement():
@@ -20,9 +31,9 @@ async def check_for_announcement():
             if (currentDate.strftime(dateFormat) == startDate.strftime(dateFormat)):
                 embed = discord.Embed(title="Reminder!", color=color)
 
-                startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
-                endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
-                embed.add_field(name=i["title"], value=f"{startHour} - {endHour} GMT", inline=False)
+                startHour = datetime.datetime.strptime(i["start"], dateFormat).replace(tzinfo=pytz.utc)
+                endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
+                embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
 
                 await messageChannel.send(embed=embed)
                 print(f"Sent announcement message: {i['title']}")
@@ -39,19 +50,19 @@ class Client(discord.Client):
             await message.channel.send(f'Hello {message.author.mention}!')
 
         elif message.content.startswith('!agenda-full'):
-            currentDate = datetime.datetime.today()
             agenda = json.load(open(config("SCHEDULES_FILE_NAME")))
             serverID = message.guild.id
 
             for j in agenda:
                 if (j["server_id"] == serverID):
-                    embed = discord.Embed(title="Full agenda".format(currentDate.strftime("%Y-%m-%d")), color=color)
+                    embed = discord.Embed(title="Full agenda", color=color)
                     for i in j["schedule"]:
-                        startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
-                        endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
-                        embed.add_field(name=i["title"], value=f"{startHour} - {endHour} GMT", inline=False)
+                        date = datetime.datetime.strptime(i["start"], dateFormat).strftime("%Y-%m-%d")
+                        startHour = datetime.datetime.strptime(i["start"], dateFormat).replace(tzinfo=pytz.utc)
+                        endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
+                        embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
 
-                await message.channel.send(embed=embed)
+                    await message.channel.send(embed=embed)
                 break
         
         elif message.content.startswith('!agenda'):
@@ -71,9 +82,9 @@ class Client(discord.Client):
                     if (todaysAgenda):
                         embed = discord.Embed(title="Agenda ({})".format(currentDate.strftime("%Y-%m-%d")), color=color)
                         for i in todaysAgenda:
-                            startHour = datetime.datetime.strptime(i["start"], dateFormat).strftime("%H:%M")
-                            endHour = datetime.datetime.strptime(i["end"], dateFormat).strftime("%H:%M")
-                            embed.add_field(name=i["title"], value=f"{startHour} - {endHour} GMT", inline=False)
+                            startHour = datetime.datetime.strptime(i["start"], dateFormat).replace(tzinfo=pytz.utc)
+                            endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
+                            embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
                     else:
                         embed = discord.Embed(title="Today's agenda is empty!", color=color)
 
@@ -87,7 +98,6 @@ class Client(discord.Client):
             embed.add_field(name="!hello", value="Greets the user.", inline=False)
             embed.add_field(name="!agenda", value="Shows today's agenda", inline=False)
             embed.add_field(name="!agenda-full", value="Shows full agenda", inline=False)
-
 
             await message.channel.send(embed=embed)
 

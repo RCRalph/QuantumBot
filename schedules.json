@@ -2,6 +2,7 @@
     {
         "server_id": 872134154744111155,
         "channel_id": 872134154744111158,
+        "timezones": ["CET"],
         "schedule": [
             {
                 "title": "Paweł Gora - Wprowadzenie",
@@ -43,6 +44,7 @@
     {
         "server_id": 866299641526878238,
         "channel_id": 866302518531194940,
+        "timezones": ["CET"],
         "schedule": [
             {
                 "title": "Start of the Hackathon, Kick-off lecture (Paweł Gora)",
@@ -99,6 +101,7 @@
     {
         "server_id": 943201894816415825,
         "channel_id": 944561780884123688,
+        "timezones": ["UTC", "CET"],
         "schedule": [
             {
                 "title": "Lecture",
