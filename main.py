@@ -60,7 +60,7 @@ class Client(discord.Client):
                         date = datetime.datetime.strptime(i["start"], dateFormat).strftime("%Y-%m-%d")
                         startHour = datetime.datetime.strptime(i["start"], dateFormat).replace(tzinfo=pytz.utc)
                         endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
-                        embed.add_field(name=f"{i['title']} {date}", value=getTimesString(startHour, endHour, j['timezones']), inline=False)
+                        embed.add_field(name=f"{i['title']} ({date})", value=getTimesString(startHour, endHour, j['timezones']), inline=False)
 
                     await message.channel.send(embed=embed)
                     break
