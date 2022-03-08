@@ -29,6 +29,7 @@ async def check_for_announcement():
 
         for i in j["schedule"]:
             startDate = datetime.datetime.strptime(i["start"], dateFormat)
+
             if (currentDate.strftime(dateFormat) == startDate.strftime(dateFormat)):
                 embed = discord.Embed(title="Reminder!", color=color)
 
@@ -36,6 +37,7 @@ async def check_for_announcement():
                 endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
                 embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
 
+                await messageChannel.send("@everyone")
                 await messageChannel.send(embed=embed)
                 print(f"Sent announcement message: {i['title']}")
 
