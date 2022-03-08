@@ -1,5 +1,5 @@
 # QuantumBot
-Discord Bot for Quantum Hackathon organized by Quantum AI Foundation
+Discord bot for hackathons and workshops organized by Quantum AI Foundation
 
 # Required Discord permissions
 - View channel
@@ -7,4 +7,5 @@ Discord Bot for Quantum Hackathon organized by Quantum AI Foundation
 - Embed links
 - Attach files
 - Add reactions
+- Mention @everyone, @here etc.
 - Read message history
