@@ -16,6 +16,7 @@ def getTimesString(startHourUTC, endHourUTC, timezones):
         retStr += f"{startHour} - {endHour} {item}"
         if (i < len(timezones) - 1):
             retStr += " | "
+        
     return retStr
 
 @aiocron.crontab("* * * * *")
