@@ -25,7 +25,7 @@ async def check_for_announcement():
 
     for j in agenda:
         messageChannel = client.get_channel(j["channel_id"])
-        currentDate = datetime.datetime.now(datetime.timezone.utc)
+        currentDate = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=10)
 
         for i in j["schedule"]:
             startDate = datetime.datetime.strptime(i["start"], dateFormat)
