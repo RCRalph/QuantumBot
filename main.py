@@ -37,8 +37,7 @@ async def check_for_announcement():
                 endHour = datetime.datetime.strptime(i["end"], dateFormat).replace(tzinfo=pytz.utc)
                 embed.add_field(name=i["title"], value=getTimesString(startHour, endHour, j["timezones"]), inline=False)
 
-                await messageChannel.send("@everyone")
-                await messageChannel.send(embed=embed)
+                await messageChannel.send("@everyone", embed=embed)
                 print(f"Sent announcement message: {i['title']}")
 
 class Client(discord.Client):
