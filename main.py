@@ -28,6 +28,7 @@ async def check_for_announcement():
         currentDate = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=10)
 
         for i in j["schedule"]:
+            print("announcement")
             startDate = datetime.datetime.strptime(i["start"], dateFormat)
 
             if (currentDate.strftime(dateFormat) == startDate.strftime(dateFormat)):
