@@ -136,9 +136,24 @@
         "timezones": ["CET"],
         "schedule": [
             {
-                "title": "Test",
-                "start": "2022-09-06 14:45",
-                "end": "2022-09-06 14:55"
+                "title": "Pierwszy dzień warsztatów",
+                "start": "2022-09-10 14:00",
+                "end": "2022-09-10 18:00"
+            },
+            {
+                "title": "Drugi dzień warsztatów",
+                "start": "2022-09-11 14:00",
+                "end": "2022-09-11 18:00"
+            },
+            {
+                "title": "Trzeci dzień warsztatów",
+                "start": "2022-09-17 14:00",
+                "end": "2022-09-17 18:00"
+            },
+            {
+                "title": "Czwarty dzień warsztatów",
+                "start": "2022-09-18 14:00",
+                "end": "2022-09-18 18:00"
             }
         ]
     }
