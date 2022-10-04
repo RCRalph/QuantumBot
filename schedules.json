@@ -156,5 +156,52 @@
                 "end": "2022-09-18 18:00"
             }
         ]
+    },
+    {
+        "server_id": 1017776101126320219,
+        "channel_id": 1017780313876877372,
+        "timezones": ["CET"],
+        "schedule": [
+            {
+                "title": "Wprowadzenie do liczb zespolonych",
+                "start": "2022-10-08 14:00",
+                "end": "2022-10-08 16:00"
+            },
+            {
+                "title": "Praca z notebookami",
+                "start": "2022-10-08 16:00",
+                "end": "2022-10-08 18:00"
+            },
+            {
+                "title": "Sfera Blocha, operacja na liczbach zespolonych",
+                "start": "2022-10-09 14:00",
+                "end": "2022-10-09 16:00"
+            },
+            {
+                "title": "Praca z notebookami",
+                "start": "2022-10-09 16:00",
+                "end": "2022-10-09 18:00"
+            },
+            {
+                "title": "Kwantowa Transformata Fouriera i jej zastosowania",
+                "start": "2022-10-15 14:00",
+                "end": "2022-10-15 16:00"
+            },
+            {
+                "title": "Praca z notebookami",
+                "start": "2022-10-15 16:00",
+                "end": "2022-10-15 18:00"
+            },
+            {
+                "title": "Algorytm Shora",
+                "start": "2022-10-16 14:00",
+                "end": "2022-10-16 16:00"
+            },
+            {
+                "title": "Praca z notebookami",
+                "start": "2022-10-16 16:00",
+                "end": "2022-10-16 18:00"
+            }
+        ]
     }
 ]
