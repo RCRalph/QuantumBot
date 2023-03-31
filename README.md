@@ -1,7 +1,13 @@
 # QuantumBot
-Discord bot for hackathons and workshops organized by Quantum AI Foundation
+Discord bot for events organized by Quantum AI Foundation
 
-# Required Discord permissions
+# Available commands
+- `!help` - shows available commands
+- `!hello` - greets the user
+- `!agenda` - shows the agenda for the current day
+- `!agenda-full` - shows the agenda of all events
+
+## Required Discord permissions
 - View channel
 - Send messages
 - Embed links
@@ -10,7 +16,7 @@ Discord bot for hackathons and workshops organized by Quantum AI Foundation
 - Mention @everyone, @here etc.
 - Read message history
 
-# Schedule file information
+## Schedule file information
 ```js
 {
     "server_id": // ID of target server
