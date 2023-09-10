@@ -1,6 +1,6 @@
 .venv
 .env
 */__pycache__
-schedules/*
-!schedules/schedule.json.example
+servers/*
+!servers/server.json.example
 

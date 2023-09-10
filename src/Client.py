@@ -1,21 +1,22 @@
 import discord, aiocron
-from src.ScheduleData import ScheduleData
+from src.Servers import Servers
 from src.Translations import Translations
 
 class Client(discord.Client):
     color = 0x2f3855
+    servers_data: Servers = None
 
     async def on_ready(self):
         print(f"Logged in as {self.user}!", end="\n\n")
-        self.schedule_data = ScheduleData()
+        self.servers_data = Servers()
 
         aiocron.crontab("* * * * *", self.check_for_announcements)
 
     async def check_for_announcements(self):
-        for item in self.schedule_data.check_for_announcements():
+        for item in self.servers_data.check_for_announcements():
             embed = discord.Embed(
                 title = Translations.get_translation(
-                    self.schedule_data.get_language(item["server_id"]),
+                    self.servers_data.get_language(item["server_id"]),
                     "reminder"
                 ),
                 color = self.color
@@ -31,15 +32,15 @@ class Client(discord.Client):
     async def schedule_full(self, message: discord.Message):
         embed = discord.Embed(
             title = Translations.get_translation(
-                self.schedule_data.get_language(message.guild.id),
+                self.servers_data.get_language(message.guild.id),
                 "schedule"
-            ) + " - " + self.schedule_data.schedules[message.guild.id].name,
+            ) + " - " + self.servers_data.servers[message.guild.id].name,
             color = self.color
         )
 
-        if not self.schedule_data.get_full_schedule(message.guild.id, embed):
+        if not self.servers_data.get_full_schedule(message.guild.id, embed):
             embed.add_field(name = Translations.get_translation(
-                self.schedule_data.get_language(message.guild.id),
+                self.servers_data.get_language(message.guild.id),
                 "schedule-empty"
             ))
 
@@ -48,15 +49,15 @@ class Client(discord.Client):
     async def schedule(self, message: discord.Message):
         embed = discord.Embed(
             title = Translations.get_translation(
-                self.schedule_data.get_language(message.guild.id),
+                self.servers_data.get_language(message.guild.id),
                 "schedule-today"
             ),
             color = self.color
         )
 
-        if not self.schedule_data.get_todays_schedule(message.guild.id, embed):
+        if not self.servers_data.get_todays_schedule(message.guild.id, embed):
             embed.add_field(name = Translations.get_translation(
-                self.schedule_data.get_language(message.guild.id),
+                self.servers_data.get_language(message.guild.id),
                 "schedule-empty"
             ))
 
@@ -87,7 +88,7 @@ class Client(discord.Client):
         if message.content.startswith("!help"):
             embed = discord.Embed(
                 title = Translations.get_translation(
-                    self.schedule_data.get_language(message.guild.id),
+                    self.servers_data.get_language(message.guild.id),
                     "help"
                 ),
                 color = self.color
@@ -96,7 +97,7 @@ class Client(discord.Client):
             embed.add_field(
                 name="!help",
                 value=Translations.get_translation(
-                    self.schedule_data.get_language(message.guild.id),
+                    self.servers_data.get_language(message.guild.id),
                     "help-description"
                 ),
                 inline=False
@@ -106,7 +107,7 @@ class Client(discord.Client):
                 embed.add_field(
                     name=item["callout"],
                     value=Translations.get_translation(
-                        self.schedule_data.get_language(message.guild.id),
+                        self.servers_data.get_language(message.guild.id),
                         item["description"]
                     ),
                     inline=False

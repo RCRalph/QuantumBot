@@ -2,7 +2,7 @@ import datetime, pytz
 from src.Formats import Formats
 from src.Event import Event
 
-class Schedule:
+class Server:
     name = ""
     server_id = 0
     announcement_channel_id = 0
