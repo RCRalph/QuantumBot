@@ -1,0 +1,16 @@
+{
+    "name": "",
+    "server_id": 0,
+    "announcement_channel_id": 0,
+    "language": "EN",
+    "timezones": [],
+    "schedule": [
+        {
+            "title": "",
+            "description": "",
+            "start": "1970-01-01 00:00",
+            "end": "1970-01-01 23:59",
+            "announcement": [10]
+        }
+    ]
+}
