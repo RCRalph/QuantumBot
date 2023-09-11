@@ -24,13 +24,13 @@ class Translations:
         },
         "PL": {
             "weekdays": [
-                "poniedziałek",
-                "wtorek",
-                "środa",
-                "czwartek",
-                "piątek",
-                "sobota",
-                "niedziela"
+                "Poniedziałek",
+                "Wtorek",
+                "Środa",
+                "Czwartek",
+                "Piątek",
+                "Sobota",
+                "Niedziela"
             ],
             "reminder": "Przypomnienie!",
             "schedule": "Harmonogram",

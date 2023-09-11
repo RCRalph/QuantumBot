@@ -16,52 +16,57 @@ class Client(discord.Client):
         for item in self.servers_data.check_for_announcements():
             embed = discord.Embed(
                 title = Translations.get_translation(
-                    self.servers_data.get_language(item["server_id"]),
+                    self.servers_data.servers[item["server_id"]].language,
                     "reminder"
                 ),
                 color = self.color
             )
 
-            embed.add_field(name = item["name"], value = item["value"])
+            embed.add_field(name=item["name"], value=item["value"])
 
-            await self.get_channel(item["channel_id"]).send("@everyone", embed = embed)
+            await self.get_channel(item["channel_id"]).send("@everyone", embed=embed)
 
     async def hello(self, message: discord.Message):
         await message.channel.send(f"Hello {message.author.mention}!")
 
     async def schedule_full(self, message: discord.Message):
         embed = discord.Embed(
-            title = Translations.get_translation(
-                self.servers_data.get_language(message.guild.id),
+            title=Translations.get_translation(
+                self.servers_data.servers[message.guild.id].language,
                 "schedule"
             ) + " - " + self.servers_data.servers[message.guild.id].name,
-            color = self.color
+            color=self.color
         )
 
-        if not self.servers_data.get_full_schedule(message.guild.id, embed):
-            embed.add_field(name = Translations.get_translation(
-                self.servers_data.get_language(message.guild.id),
-                "schedule-empty"
-            ))
+        if message.guild.id in self.servers_data.servers:
+            self.servers_data.servers[message.guild.id].get_full_schedule(embed)
+        else:
+            embed.add_field(
+                name=Translations.get_translation(
+                    self.servers_data.servers[message.guild.id].language,
+                    "schedule-empty"
+                ),
+                value=""
+            )
 
-        await message.channel.send(embed = embed)
+        await message.channel.send(embed=embed)
 
     async def schedule(self, message: discord.Message):
         embed = discord.Embed(
-            title = Translations.get_translation(
-                self.servers_data.get_language(message.guild.id),
+            title=Translations.get_translation(
+                self.servers_data.servers[message.guild.id].language,
                 "schedule-today"
             ),
-            color = self.color
+            color=self.color
         )
 
-        if not self.servers_data.get_todays_schedule(message.guild.id, embed):
-            embed.add_field(name = Translations.get_translation(
-                self.servers_data.get_language(message.guild.id),
+        if not self.servers_data.servers[message.guild.id].get_todays_schedule(embed):
+            embed.add_field(name=Translations.get_translation(
+                self.servers_data.servers[message.guild.id].language,
                 "schedule-empty"
             ))
 
-        await message.channel.send(embed = embed)
+        await message.channel.send(embed=embed)
 
     async def on_message(self, message: discord.Message):
         COMMANDS = [
@@ -87,33 +92,33 @@ class Client(discord.Client):
 
         if message.content.startswith("!help"):
             embed = discord.Embed(
-                title = Translations.get_translation(
-                    self.servers_data.get_language(message.guild.id),
+                title=Translations.get_translation(
+                    self.servers_data.servers[message.guild.id].language,
                     "help"
                 ),
-                color = self.color
+                color=self.color
             )
 
             embed.add_field(
                 name="!help",
                 value=Translations.get_translation(
-                    self.servers_data.get_language(message.guild.id),
+                    self.servers_data.servers[message.guild.id].language,
                     "help-description"
                 ),
                 inline=False
             )
 
-            for item in sorted(COMMANDS, key = lambda x: x["callout"]):
+            for item in sorted(COMMANDS, key=lambda x: x["callout"]):
                 embed.add_field(
                     name=item["callout"],
                     value=Translations.get_translation(
-                        self.servers_data.get_language(message.guild.id),
+                        self.servers_data.servers[message.guild.id].language,
                         item["description"]
                     ),
                     inline=False
                 )
 
-            await message.channel.send(embed = embed)
+            await message.channel.send(embed=embed)
             return
 
         for item in COMMANDS:
