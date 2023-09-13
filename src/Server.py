@@ -42,7 +42,7 @@ class Server:
             end_date = end_timestamp.strftime(Formats.DATE)
 
             if start_date != end_date:
-                result.append(f"{start_date} {start_time} {item} - {end_date} {end_time} {item}")
+                result.append(f"{start_date} {start_time} - {end_date} {end_time} {item}")
             elif start_time != end_time:
                 result.append(f"{start_time} - {end_time} {item}")
             else:
