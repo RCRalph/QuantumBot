@@ -1,15 +1,27 @@
 class Translations:
+    WEEKDAYS = {
+        "EN": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+        ],
+        "PL": [
+            "Poniedziałek",
+            "Wtorek",
+            "Środa",
+            "Czwartek",
+            "Piątek",
+            "Sobota",
+            "Niedziela"
+        ]
+    }
+
     TRANSLATIONS = {
         "EN": {
-            "weekdays": [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday"
-            ],
             "reminder": "Reminder!",
             "schedule": "Schedule",
             "schedule-today": "Today's schedule",
@@ -21,17 +33,9 @@ class Translations:
             "hello-description": "Greet the user",
             "schedule-description": "Show today's schedule",
             "schedule-full-description": "Show full schedule",
+            "task": "Task"
         },
         "PL": {
-            "weekdays": [
-                "Poniedziałek",
-                "Wtorek",
-                "Środa",
-                "Czwartek",
-                "Piątek",
-                "Sobota",
-                "Niedziela"
-            ],
             "reminder": "Przypomnienie!",
             "schedule": "Harmonogram",
             "schedule-today": "Dzisiejszy harmonogram",
@@ -43,8 +47,16 @@ class Translations:
             "hello-description": "Powitaj użytkownika",
             "schedule-description": "Pokaż dzisiejszy harmonogram",
             "schedule-full-description": "Pokaż pełny harmonogram",
+            "task": "Zadanie"
         },
     }
+
+    @staticmethod
+    def get_weekday(language: str, weekday_index: int):
+        if language not in Translations.WEEKDAYS:
+            raise KeyError(f"Language {language} doesn't exist")
+        elif weekday_index not in range(len(Translations.WEEKDAYS[language])):
+            raise KeyError(f"Weekday {weekday_index} doesn't exist in {language}")
 
     @staticmethod
     def get_translation(language: str, key: str):

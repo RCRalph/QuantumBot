@@ -7,6 +7,7 @@ class Server:
     name = ""
     server_id = 0
     announcement_channel_id = 0
+    workshop_reaction_channel_id = 0
     language = ""
     timezones: list[str] = []
     schedule: dict[str, list[Event]] = {}
@@ -18,6 +19,9 @@ class Server:
         self.announcement_channel_id = data["announcement_channel_id"]
         self.language = data["language"]
         self.timezones = data["timezones"]
+
+        if "workshop_reaction_channel_id" in data:
+            self.workshop_reaction_channel_id = data["workshop_reaction_channel_id"]
 
         self.schedule_to_dict(data["schedule"])
         self.last_event_datetime(data["schedule"])
@@ -82,7 +86,7 @@ class Server:
 
     def get_date_header_value(self, date: str):
         weekday = datetime.datetime.strptime(date, Formats.DATE).weekday()
-        weekday_name = Translations.get_translation(self.language, "weekdays")[weekday]
+        weekday_name = Translations.get_weekday(self.language, weekday)
 
         start = min(self.schedule[date], key=lambda x: x.start_UTC)
         end = max(self.schedule[date], key=lambda x: x.end_UTC)

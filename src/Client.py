@@ -90,6 +90,17 @@ class Client(discord.Client):
         if message.author == self.user:
             return
 
+        if self.servers_data.servers[message.guild.id].workshop_reaction_channel_id == message.channel.id:
+            task_callout = Translations.get_translation(
+                self.servers_data.servers[message.guild.id].language,
+                'task'
+            )
+
+            if message.content.capitalize().startswith(task_callout + ":"):
+                await message.add_reaction("🌕")
+                await message.add_reaction("🌒")
+                await message.add_reaction("☁️")
+
         if message.content.startswith("!help"):
             embed = discord.Embed(
                 title=Translations.get_translation(

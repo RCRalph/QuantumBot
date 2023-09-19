@@ -41,6 +41,15 @@ class Validator:
 
         return True
 
+    def validate_workshop_reaction_channel_id(self):
+        if "workshop_reaction_channel_id" not in self.content:
+            return True
+
+        if type(self.content["workshop_reaction_channel_id"]) is not int:
+            return self.show_error("Property 'workshop_reaction_channel_id' should be an integer")
+
+        return True
+
     def validate_language(self):
         try:
             if self.content["language"] not in self.languages:
