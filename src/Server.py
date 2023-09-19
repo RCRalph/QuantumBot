@@ -139,6 +139,5 @@ class Server:
 
         return True
 
-
     def get_current_timestamp(self):
         return datetime.datetime.now(datetime.timezone.utc)
