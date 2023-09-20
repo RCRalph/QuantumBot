@@ -98,7 +98,7 @@ class Client(discord.Client):
 
             if message.content.capitalize().startswith(task_callout + ":"):
                 await message.add_reaction("🌕")
-                await message.add_reaction("🌒")
+                await message.add_reaction("🌘")
                 await message.add_reaction("☁️")
 
         if message.content.startswith("!help"):
