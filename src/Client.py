@@ -90,6 +90,11 @@ class Client(discord.Client):
         if message.author == self.user:
             return
 
+        for item in COMMANDS:
+            if message.content.startswith(item["callout"]):
+                await item["function"](message)
+                return
+
         if self.servers_data.servers[message.guild.id].workshop_reaction_channel_id == message.channel.id:
             task_callout = Translations.get_translation(
                 self.servers_data.servers[message.guild.id].language,
@@ -131,8 +136,3 @@ class Client(discord.Client):
 
             await message.channel.send(embed=embed)
             return
-
-        for item in COMMANDS:
-            if message.content.startswith(item["callout"]):
-                await item["function"](message)
-                return
