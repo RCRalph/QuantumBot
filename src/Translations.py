@@ -58,6 +58,8 @@ class Translations:
         elif weekday_index not in range(len(Translations.WEEKDAYS[language])):
             raise KeyError(f"Weekday {weekday_index} doesn't exist in {language}")
 
+        return Translations.WEEKDAYS[language][weekday_index]
+
     @staticmethod
     def get_translation(language: str, key: str):
         if language not in Translations.TRANSLATIONS:
