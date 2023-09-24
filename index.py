@@ -8,4 +8,4 @@ intents = discord.Intents().default()
 intents.message_content = True
 
 client = Client(intents=intents)
-client.run(config('BOT_TOKEN'))
+client.run(config("BOT_TOKEN"))
