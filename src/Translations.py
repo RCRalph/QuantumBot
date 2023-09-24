@@ -33,7 +33,8 @@ class Translations:
             "hello-description": "Greet the user",
             "schedule-description": "Show today's schedule",
             "schedule-full-description": "Show full schedule",
-            "task": "Task"
+            "task": "Task",
+            "test": "If you can see this message and it's in the expected language, that means the configuration is correct!",
         },
         "PL": {
             "reminder": "Przypomnienie!",
@@ -47,28 +48,34 @@ class Translations:
             "hello-description": "Powitaj użytkownika",
             "schedule-description": "Pokaż dzisiejszy harmonogram",
             "schedule-full-description": "Pokaż pełny harmonogram",
-            "task": "Zadanie"
+            "task": "Zadanie",
+            "test": "Jeśli widzisz tę wiadomość oraz jest ona w oczekiwanym języku, to znaczy że konfiguracja jest poprawna!",
         },
     }
 
-    @staticmethod
-    def get_weekday(language: str, weekday_index: int):
-        if language not in Translations.WEEKDAYS:
+    language = "EN"
+
+    def __init__(self, language: str):
+        if language not in self.languages():
             raise KeyError(f"Language {language} doesn't exist")
-        elif weekday_index not in range(len(Translations.WEEKDAYS[language])):
-            raise KeyError(f"Weekday {weekday_index} doesn't exist in {language}")
 
-        return Translations.WEEKDAYS[language][weekday_index]
+        self.language = language
 
     @staticmethod
-    def get_translation(language: str, key: str):
-        if language not in Translations.TRANSLATIONS:
-            raise KeyError(f"Language {language} doesn't exist")
-        elif key not in Translations.TRANSLATIONS[language]:
-            raise KeyError(f"{key} doesn't exist in {language}")
+    def languages():
+        return list(Translations.WEEKDAYS.keys())
 
-        return Translations.TRANSLATIONS[language][key]
+    def keys(self):
+        return list(Translations.TRANSLATIONS[self.language].keys())
 
-    @staticmethod
-    def keys():
-        return list(Translations.TRANSLATIONS["EN"].keys())
+    def get_weekday(self, weekday_index: int):
+        if weekday_index not in range(len(Translations.WEEKDAYS[self.language])):
+            raise KeyError(f"Weekday {weekday_index} doesn't exist in {self.language}")
+
+        return Translations.WEEKDAYS[self.language][weekday_index]
+
+    def get_translation(self, key: str):
+        if key not in Translations.TRANSLATIONS[self.language]:
+            raise KeyError(f"{key} doesn't exist in {self.language}")
+
+        return Translations.TRANSLATIONS[self.language][key]

@@ -11,7 +11,7 @@ class Server:
     language = ""
     timezones: list[str] = []
     schedule: dict[str, list[Event]] = {}
-    last_date = datetime.datetime.now()
+    translations: Translations
 
     def __init__(self, data):
         self.name = data["name"]
@@ -20,15 +20,13 @@ class Server:
         self.language = data["language"]
         self.timezones = data["timezones"]
 
+        self.translations = Translations(data["language"])
+
         if "workshop_reaction_channel_id" in data:
             self.workshop_reaction_channel_id = data["workshop_reaction_channel_id"]
 
-        self.schedule_to_dict(data["schedule"])
-        self.last_event_datetime(data["schedule"])
-
-    def last_event_datetime(self, schedule: dict):
-        last_ending_event = max(schedule, key = lambda x: x["end"])
-        self.last_date = datetime.datetime.strptime(last_ending_event["end"], Formats.DATETIME)
+        if "schedule" in data:
+            self.schedule_to_dict(data["schedule"])
 
     def get_timezones_text(self, start_UTC: datetime.datetime, end_UTC: datetime.datetime):
         result, title_date = [], ""
@@ -86,7 +84,7 @@ class Server:
 
     def get_date_header_value(self, date: str):
         weekday = datetime.datetime.strptime(date, Formats.DATE).weekday()
-        weekday_name = Translations.get_weekday(self.language, weekday)
+        weekday_name = self.translations.get_weekday(weekday)
 
         start = min(self.schedule[date], key=lambda x: x.start_UTC)
         end = max(self.schedule[date], key=lambda x: x.end_UTC)
@@ -101,7 +99,7 @@ class Server:
     def get_full_schedule(self, embed: discord.Embed):
         if not self.schedule:
             embed.add_field(
-                name=Translations.get_translation(self.language, 'schedule-empty'),
+                name=self.translations.get_translation("schedule-empty"),
                 value="",
                 inline=False
             )
@@ -109,7 +107,8 @@ class Server:
         for date in sorted(list(self.schedule.keys())):
             embed.add_field(
                 name=self.get_date_header_name(date),
-                value=self.get_date_header_value(date)
+                value=self.get_date_header_value(date),
+                inline=False
             )
 
             for event in sorted(self.schedule[date], key=lambda x: x.times):
@@ -136,12 +135,10 @@ class Server:
                 )
         else:
             embed.add_field(
-                name=Translations.get_translation(self.language, 'schedule-today-empty'),
+                name=self.translations.get_translation("schedule-today-empty"),
                 value="",
                 inline=False
             )
-
-        return True
 
     def get_current_timestamp(self):
         return datetime.datetime.now(datetime.timezone.utc)

@@ -1,14 +1,27 @@
-import pytz, datetime
+import pytz, datetime, json, os
+from src.Translations import Translations
 
 class Validator:
     filename = ""
     content = dict()
-    languages = []
+    languages = Translations.languages()
 
-    def __init__(self, filename: str, content: dict, languages: list):
+    def __init__(self, filename: str, content: dict):
         self.filename = filename
         self.content = content
-        self.languages = languages
+
+    @staticmethod
+    def is_json_file(directory: str, filename: str):
+        if not (filename.endswith(".json") and os.path.isfile(f"{directory}/{filename}")):
+            return False
+
+        with open(f"{directory}/{filename}") as file:
+            try:
+                json.load(file)
+                return True
+            except:
+                print(f"Invalid formatting of file {filename}, should be a JSON file.")
+                return False
 
     def show_error(self, message: str):
         print(f"{self.filename}: {message}")
@@ -128,32 +141,32 @@ class Validator:
         return True
 
     def validate_schedule(self):
-        try:
-            if type(self.content["schedule"]) is not list:
-                return self.show_error("Schedule should be a list")
+        if "schedule" not in self.content["schedule"]:
+            return True
 
-            if not len(self.content["schedule"]):
-                return self.show_error("Schedule shouldn't be empty")
+        if type(self.content["schedule"]) is not list:
+            return self.show_error("Schedule should be a list")
 
-            for item in self.content["schedule"]:
-                for key in ["title", "start", "end"]:
-                    if key not in item:
-                        return self.show_error(f"Schedule missing {key}")
+        if not len(self.content["schedule"]):
+            return self.show_error("Schedule shouldn't be empty")
 
-                if not (
-                    self.validate_schedule_title(item["title"])
-                    and self.validate_schedule_time(item["start"])
-                    and self.validate_schedule_time(item["end"])
+        for item in self.content["schedule"]:
+            for key in ["title", "start", "end"]:
+                if key not in item:
+                    return self.show_error(f"Schedule missing {key}")
 
-                    # Optional properties
-                    and self.validate_schedule_description(item)
-                    and self.validate_schedule_announcements(item)
-                ): return False
+            if not (
+                self.validate_schedule_title(item["title"])
+                and self.validate_schedule_time(item["start"])
+                and self.validate_schedule_time(item["end"])
 
-                if item["start"] > item["end"]:
-                    return self.show_error(f"Schedule {item['title']} start is after end")
-        except KeyError:
-            self.show_error("Missing 'schedule' property")
+                # Optional properties
+                and self.validate_schedule_description(item)
+                and self.validate_schedule_announcements(item)
+            ): return False
+
+            if item["start"] > item["end"]:
+                return self.show_error(f"Schedule {item['title']} start is after end")
 
         return True
 
