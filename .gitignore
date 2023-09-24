@@ -1,6 +1,6 @@
 .venv
 .env
-*/__pycache__
+**/__pycache__
 servers/*
 !servers/server.json.example
 
