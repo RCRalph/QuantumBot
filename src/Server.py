@@ -121,12 +121,15 @@ class Server:
                 )
 
     def get_todays_schedule(self, embed: discord.Embed):
-        date = self.get_current_timestamp() \
-            .replace(tzinfo=pytz.utc) \
-            .astimezone(pytz.timezone(self.timezones[0])) \
-            .strftime(Formats.DATE)
+        date = self.get_current_date()
 
-        if date in self.schedule:
+        if not self.schedule:
+            embed.add_field(
+                name=self.translations.get_translation("schedule-empty"),
+                value="",
+                inline=False
+            )
+        elif date in self.schedule:
             for event in self.schedule[date]:
                 embed.add_field(
                     name=f"{event.title}: {event.times}",
@@ -140,5 +143,8 @@ class Server:
                 inline=False
             )
 
-    def get_current_timestamp(self):
-        return datetime.datetime.now(datetime.timezone.utc)
+    def get_current_date(self):
+        return datetime.datetime.now(datetime.timezone.utc) \
+            .replace(tzinfo=pytz.utc) \
+            .astimezone(pytz.timezone(self.timezones[0])) \
+            .strftime(Formats.DATE)

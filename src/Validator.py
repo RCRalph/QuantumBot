@@ -1,9 +1,10 @@
 import pytz, datetime, json, os
 from src.Translations import Translations
+from src.Formats import Formats
 
 class Validator:
-    filename = ""
-    content = dict()
+    filename: str
+    content: dict
     languages = Translations.languages()
 
     def __init__(self, filename: str, content: dict):
@@ -118,7 +119,7 @@ class Validator:
             return self.show_error(f"Schedule {title} start should be a string")
         else:
             try:
-                datetime.datetime.strptime(time, self.DATE_FORMAT)
+                datetime.datetime.strptime(time, Formats.DATETIME)
             except ValueError:
                 return self.show_error(f"Schedule {title} start should have a valid format")
 
@@ -141,14 +142,11 @@ class Validator:
         return True
 
     def validate_schedule(self):
-        if "schedule" not in self.content["schedule"]:
+        if "schedule" not in self.content:
             return True
 
         if type(self.content["schedule"]) is not list:
             return self.show_error("Schedule should be a list")
-
-        if not len(self.content["schedule"]):
-            return self.show_error("Schedule shouldn't be empty")
 
         for item in self.content["schedule"]:
             for key in ["title", "start", "end"]:
@@ -157,8 +155,8 @@ class Validator:
 
             if not (
                 self.validate_schedule_title(item["title"])
-                and self.validate_schedule_time(item["start"])
-                and self.validate_schedule_time(item["end"])
+                and self.validate_schedule_time(item["start"], item["title"])
+                and self.validate_schedule_time(item["end"], item["title"])
 
                 # Optional properties
                 and self.validate_schedule_description(item)
