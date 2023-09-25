@@ -10,6 +10,8 @@ class MessageReactionHandler:
 
         if message.guild.id in servers:
             self.server = servers[message.guild.id]
+        else:
+            raise KeyError("Server not found")
 
     async def handle_reaction(self):
         if None in [self.message, self.server]:

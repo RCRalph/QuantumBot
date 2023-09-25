@@ -60,8 +60,11 @@ class Client(discord.Client):
         if message.author == self.user:
             return
 
-        if message.content.startswith(config("BOT_PREFIX")):
-            return await CommandHandler(message, self.servers_data).handle_message()
-
-        await MessageReactionHandler(message, self.servers_data).handle_reaction()
+        try:
+            if message.content.startswith(config("BOT_PREFIX")):
+                await CommandHandler(message, self.servers_data).handle_message()
+            else:
+                await MessageReactionHandler(message, self.servers_data).handle_reaction()
+        except KeyError:
+            pass
 

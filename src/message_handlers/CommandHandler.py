@@ -14,6 +14,8 @@ class CommandHandler:
         if message.guild.id in servers:
             self.server = servers[message.guild.id]
             self.translations = Translations(self.server.language)
+        else:
+            raise KeyError("Server not found")
 
     async def handle_message(self):
         if None in [self.message, self.translations, self.server]:
