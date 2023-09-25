@@ -4,9 +4,9 @@ from src.Server import Server
 
 class CommandHandler:
     EMBED_COLOR = 0x2f3855
-    server = None
-    message = None
-    translations = None
+    server: Server
+    message: discord.Message
+    translations: Translations
 
     def __init__(self, message: discord.Message, servers: dict[int, Server]):
         self.message = message
