@@ -35,6 +35,8 @@ class Translations:
             "schedule-full-description": "Show full schedule",
             "task": "Task",
             "test": "If you can see this message and it's in the expected language, that means the configuration is correct!",
+            "deadlines": "Deadlines",
+            "deadlines-empty": "Deadlines are empty",
         },
         "PL": {
             "reminder": "Przypomnienie!",
@@ -50,6 +52,8 @@ class Translations:
             "schedule-full-description": "Pokaż pełny harmonogram",
             "task": "Zadanie",
             "test": "Jeśli widzisz tę wiadomość oraz jest ona w oczekiwanym języku, to znaczy że konfiguracja jest poprawna!",
+            "deadlines": "Terminy",
+            "deadlines-empty": "Terminy są puste",
         },
     }
 

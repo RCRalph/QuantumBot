@@ -2,6 +2,7 @@ import datetime, pytz, discord
 from src.Formats import Formats
 from src.Event import Event
 from src.Translations import Translations
+from src.Deadline import Deadline
 
 class Server:
     name = ""
@@ -11,6 +12,7 @@ class Server:
     language = ""
     timezones: list[str] = []
     schedule: dict[str, list[Event]] = {}
+    deadlines: dict[str, list[Deadline]] = {}
     translations: Translations
 
     def __init__(self, data):
@@ -27,6 +29,9 @@ class Server:
 
         if "schedule" in data:
             self.schedule_to_dict(data["schedule"])
+
+        if "deadlines" in data:
+            self.deadlines_to_dict(data["deadlines"])
 
     def get_timezones_text(self, start_UTC: datetime.datetime, end_UTC: datetime.datetime):
         result, title_date = [], ""
@@ -77,24 +82,52 @@ class Server:
         for date in self.schedule:
             self.schedule[date].sort(key = lambda x: x.times)
 
+    def deadlines_to_dict(self, deadlines: dict):
+        self.deadlines = {}
+
+        for item in deadlines:
+            date, times = self.get_timezones_text(
+                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc),
+                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc)
+            )
+
+            deadline = Deadline(item["title"], item["time"], times)
+
+            if "announcements" in item:
+                deadline.announcements = item["announcements"]
+
+            if "description" in item:
+                deadline.description = item["description"]
+
+            if date in self.deadlines:
+                self.deadlines[date].append(deadline)
+            else:
+                self.deadlines[date] = [deadline]
+
+        for date in self.deadlines:
+            self.deadlines[date].sort(key = lambda x: x.times)
+
     def get_date_header_name(self, date: str):
         header_limit = "-" * 6 + " " * 4
 
         return header_limit + date + header_limit[::-1]
 
-    def get_date_header_value(self, date: str):
+    def get_date_header_value(self, date: str, show_event_span = True):
         weekday = datetime.datetime.strptime(date, Formats.DATE).weekday()
-        weekday_name = self.translations.get_weekday(weekday)
+        result = self.translations.get_weekday(weekday)
 
-        start = min(self.schedule[date], key=lambda x: x.start_UTC)
-        end = max(self.schedule[date], key=lambda x: x.end_UTC)
+        if show_event_span:
+            start = min(self.schedule[date], key=lambda x: x.start_UTC)
+            end = max(self.schedule[date], key=lambda x: x.end_UTC)
 
-        event_span = self.get_timezones_text(
-            datetime.datetime.strptime(start.start_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc),
-            datetime.datetime.strptime(end.end_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc)
-        )
+            _, event_span = self.get_timezones_text(
+                datetime.datetime.strptime(start.start_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc),
+                datetime.datetime.strptime(end.end_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc)
+            )
 
-        return f"{weekday_name}, {event_span[1]}"
+            result = f"{result}, {event_span}"
+
+        return result
 
     def get_full_schedule(self, embed: discord.Embed):
         if not self.schedule:
@@ -142,6 +175,30 @@ class Server:
                 value="",
                 inline=False
             )
+
+    def get_deadlines(self, embed: discord.Embed):
+        if not self.deadlines:
+            embed.add_field(
+                name=self.translations.get_translation("deadlines-empty"),
+                value="",
+                inline=False
+            )
+
+        for date in sorted(list(self.deadlines.keys())):
+            embed.add_field(
+                name=self.get_date_header_name(date),
+                value=self.get_date_header_value(date, False),
+                inline=False
+            )
+
+            for event in sorted(self.deadlines[date], key=lambda x: x.times):
+                value = f"{event.times}\n{event.description if event.description is not None else ''}"
+
+                embed.add_field(
+                    name=f"{event.title}",
+                    value=value,
+                    inline=False
+                )
 
     def get_current_date(self):
         return datetime.datetime.now(datetime.timezone.utc) \

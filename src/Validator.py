@@ -97,47 +97,47 @@ class Validator:
 
         return True
 
-    def validate_schedule_title(self, title):
+    def validate_title(self, title):
         if type(title) is not str:
-            return self.show_error("Schedule title should be a string")
+            return self.show_error("Title should be a string")
         elif not len(title):
-            return self.show_error("Schedule title shouldn't be empty")
+            return self.show_error("Title shouldn't be empty")
 
         return True
 
-    def validate_schedule_description(self, schedule_item):
-        if "description" not in schedule_item:
+    def validate_description(self, item: dict):
+        if "description" not in item:
             return True
 
-        if type(schedule_item["description"]) is not str:
-            return self.show_error(f"Schedule {schedule_item['title']} description should be a string")
+        if type(item["description"]) is not str:
+            return self.show_error(f"Description of {item['title']} should be a string")
 
         return True
 
-    def validate_schedule_time(self, time, title: str):
+    def validate_time(self, time, title: str):
         if type(time) is not str:
-            return self.show_error(f"Schedule {title} start should be a string")
-        else:
-            try:
-                datetime.datetime.strptime(time, Formats.DATETIME)
-            except ValueError:
-                return self.show_error(f"Schedule {title} start should have a valid format")
+            return self.show_error(f"Time of {title} should be a string")
+
+        try:
+            datetime.datetime.strptime(time, Formats.DATETIME)
+        except ValueError:
+            return self.show_error(f"Time of {title} should have a valid format")
 
         return True
 
-    def validate_schedule_announcements(self, schedule_item):
-        if "announcements" not in schedule_item:
+    def validate_announcements(self, item: dict):
+        if "announcements" not in item:
             return True
 
-        if type(schedule_item["announcements"]) is not list:
-            return self.show_error(f"Schedule {schedule_item['title']} announcements should be a list")
+        if type(item["announcements"]) is not list:
+            return self.show_error(f"Announcements of {item['title']} should be a list")
 
-        if len(set(schedule_item["announcements"])) != len(schedule_item["announcements"]):
-            return self.show_error(f"Schedule {schedule_item['title']} announcements should have unique values")
+        if len(set(item["announcements"])) != len(item["announcements"]):
+            return self.show_error(f"Announcements of {item['title']} should have unique values")
 
-        for item in schedule_item["announcements"]:
-            if type(item) is not int:
-                return self.show_error(f"Schedule {schedule_item['title']} announcements should be a list of integers")
+        for i in item["announcements"]:
+            if type(i) is not int:
+                return self.show_error(f"Announcements of {item['title']} should be a list of integers")
 
         return True
 
@@ -154,17 +154,40 @@ class Validator:
                     return self.show_error(f"Schedule missing {key}")
 
             if not (
-                self.validate_schedule_title(item["title"])
-                and self.validate_schedule_time(item["start"], item["title"])
-                and self.validate_schedule_time(item["end"], item["title"])
+                self.validate_title(item["title"])
+                and self.validate_time(item["start"], item["title"])
+                and self.validate_time(item["end"], item["title"])
 
                 # Optional properties
-                and self.validate_schedule_description(item)
-                and self.validate_schedule_announcements(item)
+                and self.validate_description(item)
+                and self.validate_announcements(item)
             ): return False
 
             if item["start"] > item["end"]:
                 return self.show_error(f"Schedule {item['title']} start is after end")
+
+        return True
+
+    def validate_deadlines(self):
+        if "deadlines" not in self.content:
+            return True
+
+        if type(self.content["deadlines"]) is not list:
+            return self.show_error("Deadlines should be a list")
+
+        for item in self.content["deadlines"]:
+            for key in ["title", "time"]:
+                if key not in item:
+                    return self.show_error(f"Deadline missing {key}")
+
+            if not (
+                self.validate_title(item["title"])
+                and self.validate_time(item["time"], item["title"])
+
+                # Optional properties
+                and self.validate_description(item)
+                and self.validate_announcements(item)
+            ): return False
 
         return True
 
@@ -176,4 +199,5 @@ class Validator:
             and self.validate_language()
             and self.validate_timezones()
             and self.validate_schedule()
+            and self.validate_deadlines()
         )
