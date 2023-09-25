@@ -16,13 +16,19 @@ class Announcement:
 
 class AnnouncementHandler:
     EMBED_COLOR = 0x2f3855
-    servers: dict[int, Server] = {}
-    announcements: list[Announcement] = []
+    servers: dict[int, Server] = dict()
+    announcements: list[Announcement] = list()
 
     def __init__(self, servers: dict[int, Server]):
         self.servers = servers
 
         self.check_schedule_announcements()
+
+    def get_announcements(self):
+        for i in self.announcements:
+            yield i
+
+        self.announcements.clear()
 
     def make_announcement(self, translations: Translations, server: Server, event: Event | Deadline):
         embed = discord.Embed(

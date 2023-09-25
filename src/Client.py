@@ -7,7 +7,7 @@ from src.message_handlers.AnnouncementHandler import AnnouncementHandler
 from src.message_handlers.MessageReactionHandler import MessageReactionHandler
 
 class Client(discord.Client):
-    servers_data: dict[int, Server] = {}
+    servers_data: dict[int, Server] = dict()
     SERVER_DIRECTORY = "servers"
 
     async def on_ready(self):
@@ -23,8 +23,8 @@ class Client(discord.Client):
             if Validator.is_json_file(self.SERVER_DIRECTORY, item)
         ]
 
-        invalid_servers: list[str] = []
-        successful_servers: list[str] = []
+        invalid_servers: list[str] = list()
+        successful_servers: list[str] = list()
 
         for filename in files:
             with open(f"{self.SERVER_DIRECTORY}/{filename}") as file:
@@ -52,7 +52,7 @@ class Client(discord.Client):
                 print()
 
     async def check_for_announcements(self):
-        for item in AnnouncementHandler(self.servers_data).announcements:
+        for item in AnnouncementHandler(self.servers_data).get_announcements():
             channel = self.get_channel(item.channel_id)
             await channel.send("@everyone", embed=item.embed)
 

@@ -10,9 +10,9 @@ class Server:
     announcement_channel_id = 0
     workshop_reaction_channel_id = 0
     language = ""
-    timezones: list[str] = []
-    schedule: dict[str, list[Event]] = {}
-    deadlines: dict[str, list[Deadline]] = {}
+    timezones: list[str] = list()
+    schedule: dict[str, list[Event]] = dict()
+    deadlines: dict[str, list[Deadline]] = dict()
     translations: Translations
 
     def __init__(self, data):
@@ -58,7 +58,7 @@ class Server:
         return title_date, " | ".join(result)
 
     def schedule_to_dict(self, schedule: dict):
-        self.schedule = {}
+        self.schedule = dict()
 
         for item in schedule:
             date, times = self.get_timezones_text(
@@ -83,7 +83,7 @@ class Server:
             self.schedule[date].sort(key = lambda x: x.times)
 
     def deadlines_to_dict(self, deadlines: dict):
-        self.deadlines = {}
+        self.deadlines = dict()
 
         for item in deadlines:
             date, times = self.get_timezones_text(
