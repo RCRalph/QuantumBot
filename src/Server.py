@@ -2,7 +2,6 @@ import datetime, pytz, discord
 from src.Formats import Formats
 from src.Event import Event
 from src.Translations import Translations
-from src.Deadline import Deadline
 
 class Server:
     name = ""
@@ -12,7 +11,6 @@ class Server:
     language = ""
     timezones: list[str] = list()
     schedule: dict[str, list[Event]] = dict()
-    deadlines: dict[str, list[Deadline]] = dict()
     translations: Translations
 
     def __init__(self, data):
@@ -58,8 +56,6 @@ class Server:
         return title_date, " | ".join(result)
 
     def schedule_to_dict(self, schedule: dict):
-        self.schedule = dict()
-
         for item in schedule:
             date, times = self.get_timezones_text(
                 datetime.datetime.strptime(item["start"], Formats.DATETIME).replace(tzinfo=pytz.utc),
@@ -83,29 +79,27 @@ class Server:
             self.schedule[date].sort(key = lambda x: x.times)
 
     def deadlines_to_dict(self, deadlines: dict):
-        self.deadlines = dict()
-
         for item in deadlines:
             date, times = self.get_timezones_text(
                 datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc),
                 datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc)
             )
 
-            deadline = Deadline(item["title"], item["time"], times)
+            event = Event(item["title"], item["time"], item["time"], times)
 
             if "announcements" in item:
-                deadline.announcements = item["announcements"]
+                event.announcements = item["announcements"]
 
             if "description" in item:
-                deadline.description = item["description"]
+                event.description = item["description"]
 
-            if date in self.deadlines:
-                self.deadlines[date].append(deadline)
+            if date in self.schedule:
+                self.schedule[date].append(event)
             else:
-                self.deadlines[date] = [deadline]
+                self.schedule[date] = [event]
 
-        for date in self.deadlines:
-            self.deadlines[date].sort(key = lambda x: x.times)
+        for date in self.schedule:
+            self.schedule[date].sort(key = lambda x: x.times)
 
     def get_date_header_name(self, date: str):
         header_limit = "-" * 6 + " " * 4
@@ -175,30 +169,6 @@ class Server:
                 value="",
                 inline=False
             )
-
-    def get_deadlines(self, embed: discord.Embed):
-        if not self.deadlines:
-            embed.add_field(
-                name=self.translations.get_translation("deadlines-empty"),
-                value="",
-                inline=False
-            )
-
-        for date in sorted(list(self.deadlines.keys())):
-            embed.add_field(
-                name=self.get_date_header_name(date),
-                value=self.get_date_header_value(date, False),
-                inline=False
-            )
-
-            for event in sorted(self.deadlines[date], key=lambda x: x.times):
-                value = f"{event.times}\n{event.description if event.description is not None else ''}"
-
-                embed.add_field(
-                    name=f"{event.title}",
-                    value=value,
-                    inline=False
-                )
 
     def get_current_date(self):
         return datetime.datetime.now(datetime.timezone.utc) \

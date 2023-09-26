@@ -30,8 +30,6 @@ class CommandHandler:
                 await self.test()
             case "schedule":
                 await self.schedule(arguments)
-            case "deadlines":
-                await self.deadlines()
 
     async def config_not_found(self):
         await self.message.channel.send("Server configuration not found!")
@@ -54,15 +52,5 @@ class CommandHandler:
             self.server.get_full_schedule(embed)
         else:
             self.server.get_todays_schedule(embed)
-
-        await self.message.channel.send(embed=embed)
-
-    async def deadlines(self):
-        embed = discord.Embed(
-            title=self.translations.get_translation("deadlines") + f" - {self.server.name}",
-            color=self.EMBED_COLOR
-        )
-
-        self.server.get_deadlines(embed)
 
         await self.message.channel.send(embed=embed)

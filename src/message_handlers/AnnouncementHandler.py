@@ -4,7 +4,6 @@ from src.Server import Server
 from src.Formats import Formats
 from src.Translations import Translations
 from src.Event import Event
-from src.Deadline import Deadline
 
 class Announcement:
     embed: discord.Embed
@@ -22,15 +21,15 @@ class AnnouncementHandler:
     def __init__(self, servers: dict[int, Server]):
         self.servers = servers
 
+    def get_announcements(self):
         self.check_schedule_announcements()
 
-    def get_announcements(self):
         for i in self.announcements:
             yield i
 
         self.announcements.clear()
 
-    def make_announcement(self, translations: Translations, server: Server, event: Event | Deadline):
+    def make_announcement(self, translations: Translations, server: Server, event: Event):
         embed = discord.Embed(
             title=translations.get_translation("reminder"),
             color=self.EMBED_COLOR
@@ -55,15 +54,3 @@ class AnnouncementHandler:
 
                         if timestamp.strftime(Formats.DATETIME) == event.start_UTC:
                             self.make_announcement(self.servers[server_id].translations, self.servers[server_id], event)
-
-    def check_deadline_announcements(self):
-        current_datetime = datetime.datetime.now(datetime.timezone.utc)
-
-        for server_id in self.servers:
-            for date in self.servers[server_id].deadlines:
-                for deadline in self.servers[server_id].deadlines[date]:
-                    for i in deadline.announcements:
-                        timestamp = current_datetime + datetime.timedelta(minutes = i)
-
-                        if timestamp.strftime(Formats.DATETIME) == deadline.time_UTC:
-                            self.make_announcement(self.servers[server_id].translations, self.servers[server_id], deadline)
