@@ -4,30 +4,32 @@ from src.Event import Event
 from src.Translations import Translations
 
 class Server:
-    name = ""
-    server_id = 0
-    announcement_channel_id = 0
-    workshop_reaction_channel_id = 0
-    language = ""
-    timezones: list[str] = list()
-    schedule: dict[str, list[Event]] = dict()
+    name: str
+    server_id: int
+    announcement_channel_id: int
+    workshop_reaction_channel_id: int
+    language: str
     translations: Translations
+    timezones: list[str]
+    schedule: dict[str, list[Event]]
 
     def __init__(self, data):
         self.name = data["name"]
         self.server_id = data["server_id"]
         self.announcement_channel_id = data["announcement_channel_id"]
-        self.language = data["language"]
-        self.timezones = data["timezones"]
-
-        self.translations = Translations(data["language"])
 
         if "workshop_reaction_channel_id" in data:
             self.workshop_reaction_channel_id = data["workshop_reaction_channel_id"]
+        else:
+            self.workshop_reaction_channel_id = 0
 
+        self.language = data["language"]
+        self.translations = Translations(data["language"])
+        self.timezones = data["timezones"]
+
+        self.schedule = {}
         if "schedule" in data:
             self.schedule_to_dict(data["schedule"])
-
         if "deadlines" in data:
             self.deadlines_to_dict(data["deadlines"])
 
@@ -62,13 +64,14 @@ class Server:
                 datetime.datetime.strptime(item["end"], Formats.DATETIME).replace(tzinfo=pytz.utc),
             )
 
-            event = Event(item["title"], item["start"], item["end"], times)
-
-            if "announcements" in item:
-                event.announcements = item["announcements"]
-
-            if "description" in item:
-                event.description = item["description"]
+            event = Event(
+                item["title"],
+                item["start"],
+                item["end"],
+                times,
+                item["announcements"] if "announcements" in item else [10],
+                item["description"] if "description" in item else None
+            )
 
             if date in self.schedule:
                 self.schedule[date].append(event)
@@ -85,13 +88,14 @@ class Server:
                 datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc)
             )
 
-            event = Event(item["title"], item["time"], item["time"], times)
-
-            if "announcements" in item:
-                event.announcements = item["announcements"]
-
-            if "description" in item:
-                event.description = item["description"]
+            event = Event(
+                item["title"],
+                item["time"],
+                item["time"],
+                times,
+                item["announcements"] if "announcements" in item else [600, 240, 120],
+                item["description"] if "description" in item else None
+            )
 
             if date in self.schedule:
                 self.schedule[date].append(event)
@@ -102,7 +106,7 @@ class Server:
             self.schedule[date].sort(key = lambda x: x.times)
 
     def get_date_header_name(self, date: str):
-        header_limit = "-" * 6 + " " * 4
+        header_limit = "━" * 6 + " " * 6
 
         return header_limit + date + header_limit[::-1]
 

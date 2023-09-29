@@ -5,11 +5,12 @@ from src.Formats import Formats
 class Validator:
     filename: str
     content: dict
-    languages = Translations.languages()
+    languages: list[str]
 
     def __init__(self, filename: str, content: dict):
         self.filename = filename
         self.content = content
+        self.languages = Translations.languages()
 
     @staticmethod
     def is_json_file(directory: str, filename: str):

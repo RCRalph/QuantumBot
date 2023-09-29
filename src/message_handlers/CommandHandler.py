@@ -1,6 +1,7 @@
 import discord
 from src.Translations import Translations
 from src.Server import Server
+from src.SplitEmbed import SplitEmbed
 
 class CommandHandler:
     EMBED_COLOR = 0x2f3855
@@ -53,4 +54,5 @@ class CommandHandler:
         else:
             self.server.get_todays_schedule(embed)
 
-        await self.message.channel.send(embed=embed)
+        for item in SplitEmbed(embed).get_embeds():
+            await self.message.channel.send(embed=item)

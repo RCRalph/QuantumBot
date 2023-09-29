@@ -7,12 +7,13 @@ from src.message_handlers.AnnouncementHandler import AnnouncementHandler
 from src.message_handlers.MessageReactionHandler import MessageReactionHandler
 
 class Client(discord.Client):
-    servers_data: dict[int, Server] = dict()
+    servers_data: dict[int, Server]
     SERVER_DIRECTORY = "servers"
 
     async def on_ready(self):
         print(f"Logged in as {self.user}!")
 
+        self.servers_data = {}
         self.load_servers()
 
         aiocron.crontab("* * * * *", self.check_for_announcements)
@@ -23,8 +24,8 @@ class Client(discord.Client):
             if Validator.is_json_file(self.SERVER_DIRECTORY, item)
         ]
 
-        invalid_servers: list[str] = list()
-        successful_servers: list[str] = list()
+        invalid_servers: list[str] = []
+        successful_servers: list[str] = []
 
         for filename in files:
             with open(f"{self.SERVER_DIRECTORY}/{filename}") as file:

@@ -53,7 +53,7 @@ class Translations:
         },
     }
 
-    language = "EN"
+    language: str
 
     def __init__(self, language: str):
         if language not in self.languages():
