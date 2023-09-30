@@ -1,4 +1,4 @@
-import pytz, datetime, json, os
+import datetime, json, os, zoneinfo
 from src.Translations import Translations
 from src.Formats import Formats
 
@@ -82,17 +82,31 @@ class Validator:
             if not len(self.content["timezones"]):
                 return self.show_error("Property 'timezones' shouldn't be empty")
 
-            if len(set(self.content["timezones"])) != len(self.content["timezones"]):
-                return self.show_error("Property 'timezones' should have unique values")
-
+            timezone_names: list[str] = []
             for i in self.content["timezones"]:
-                if type(i) is not str:
-                    return self.show_error("Property 'timezones' should be a list of strings")
+                match i:
+                    case str() as name:
+                        if name not in zoneinfo.available_timezones():
+                            self.show_error(f"'{i}' isn't a valid timezone")
 
-                try:
-                    pytz.timezone(i)
-                except pytz.exceptions.UnknownTimeZoneError:
-                    return self.show_error(f"'{i}' isn't a valid timezone")
+                        timezone_names.append(name)
+                    case dict() as data:
+                        for key in ["name", "text"]:
+                            if key not in data:
+                                return self.show_error(f"Property '{key}' is required inside timezone object")
+
+                            if type(data[key]) is not str:
+                                return self.show_error(f"Property '{key}' should be a string")
+
+                        if data["name"] not in zoneinfo.available_timezones():
+                            return self.show_error(f"'{data['name']}' isn't a valid timezone")
+
+                        timezone_names.append(data["name"])
+                    case _:
+                        return self.show_error(f"Property '{key}' should be a string or a dict")
+
+            if len(set(timezone_names)) != len(timezone_names):
+                return self.show_error("Property 'timezones' should have unique values")
         except KeyError:
             return self.show_error("Missing 'timezones' property")
 

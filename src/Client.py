@@ -31,7 +31,7 @@ class Client(discord.Client):
             with open(f"{self.SERVER_DIRECTORY}/{filename}") as file:
                 content = json.load(file)
 
-                if Validator(file, content).validate():
+                if Validator(file.name, content).validate():
                     self.servers_data[content["server_id"]] = Server(content)
                     successful_servers.append(content["name"])
                 else:

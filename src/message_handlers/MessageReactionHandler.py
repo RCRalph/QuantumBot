@@ -14,7 +14,7 @@ class MessageReactionHandler:
             raise KeyError("Server not found")
 
     async def handle_reaction(self):
-        if None in [self.message, self.server]:
+        if self.server.workshop_reaction_channel_id != self.message.channel.id:
             return
 
         content = self.message.content.capitalize()

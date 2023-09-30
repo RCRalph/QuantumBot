@@ -1,7 +1,9 @@
-import datetime, pytz, discord
+import datetime, discord
+from zoneinfo import ZoneInfo
 from src.Formats import Formats
 from src.Event import Event
 from src.Translations import Translations
+from src.TimezoneData import TimezoneData
 
 class Server:
     name: str
@@ -10,7 +12,7 @@ class Server:
     workshop_reaction_channel_id: int
     language: str
     translations: Translations
-    timezones: list[str]
+    timezones: list[TimezoneData]
     schedule: dict[str, list[Event]]
 
     def __init__(self, data):
@@ -25,7 +27,17 @@ class Server:
 
         self.language = data["language"]
         self.translations = Translations(data["language"])
-        self.timezones = data["timezones"]
+
+        self.timezones = []
+        for item in data["timezones"]:
+            match item:
+                case dict() as timezone_data:
+                    self.timezones.append(TimezoneData(
+                        timezone_data["name"],
+                        timezone_data["text"]
+                    ))
+                case str() as name:
+                    self.timezones.append(TimezoneData(name))
 
         self.schedule = {}
         if "schedule" in data:
@@ -37,31 +49,29 @@ class Server:
         result, title_date = [], ""
 
         for item in self.timezones:
-            start_timestamp = start_UTC.astimezone(pytz.timezone(item))
-            start_time = start_timestamp.strftime(Formats.TIME)
-            start_date = start_timestamp.strftime(Formats.DATE)
+            start_timestamp = start_UTC.astimezone(item.timezone)
+            start_date, start_time = start_timestamp.strftime(Formats.DATETIME).split(" ", 2)
 
             if not title_date:
                 title_date = start_date
 
-            end_timestamp = end_UTC.astimezone(pytz.timezone(item))
-            end_time = end_timestamp.strftime(Formats.TIME)
-            end_date = end_timestamp.strftime(Formats.DATE)
+            end_timestamp = end_UTC.astimezone(item.timezone)
+            end_date, end_time = end_timestamp.strftime(Formats.DATETIME).split(" ", 2)
 
             if start_date != end_date:
-                result.append(f"{start_date} {start_time} - {end_date} {end_time} {item}")
+                result.append(f"{start_date} {start_time} → {end_date} {end_time} {item.text}")
             elif start_time != end_time:
-                result.append(f"{start_time} - {end_time} {item}")
+                result.append(f"{start_time} → {end_time} {item.text}")
             else:
-                result.append(f"{start_time} {item}")
+                result.append(f"{start_time} {item.text}")
 
         return title_date, " | ".join(result)
 
     def schedule_to_dict(self, schedule: dict):
         for item in schedule:
             date, times = self.get_timezones_text(
-                datetime.datetime.strptime(item["start"], Formats.DATETIME).replace(tzinfo=pytz.utc),
-                datetime.datetime.strptime(item["end"], Formats.DATETIME).replace(tzinfo=pytz.utc),
+                datetime.datetime.strptime(item["start"], Formats.DATETIME).replace(tzinfo=datetime.timezone.utc),
+                datetime.datetime.strptime(item["end"], Formats.DATETIME).replace(tzinfo=datetime.timezone.utc),
             )
 
             event = Event(
@@ -84,8 +94,8 @@ class Server:
     def deadlines_to_dict(self, deadlines: dict):
         for item in deadlines:
             date, times = self.get_timezones_text(
-                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc),
-                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=pytz.utc)
+                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=datetime.timezone.utc),
+                datetime.datetime.strptime(item["time"], Formats.DATETIME).replace(tzinfo=datetime.timezone.utc)
             )
 
             event = Event(
@@ -119,8 +129,8 @@ class Server:
             end = max(self.schedule[date], key=lambda x: x.end_UTC)
 
             _, event_span = self.get_timezones_text(
-                datetime.datetime.strptime(start.start_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc),
-                datetime.datetime.strptime(end.end_UTC, Formats.DATETIME).replace(tzinfo=pytz.utc)
+                datetime.datetime.strptime(start.start_UTC, Formats.DATETIME).replace(tzinfo=datetime.timezone.utc),
+                datetime.datetime.strptime(end.end_UTC, Formats.DATETIME).replace(tzinfo=datetime.timezone.utc)
             )
 
             result = f"{result}, {event_span}"
@@ -175,7 +185,4 @@ class Server:
             )
 
     def get_current_date(self):
-        return datetime.datetime.now(datetime.timezone.utc) \
-            .replace(tzinfo=pytz.utc) \
-            .astimezone(pytz.timezone(self.timezones[0])) \
-            .strftime(Formats.DATE)
+        return datetime.datetime.now(self.timezones[0].timezone).strftime(Formats.DATE)
