@@ -56,6 +56,7 @@ class Client(discord.Client):
         for item in AnnouncementHandler(self.servers_data).get_announcements():
             channel = self.get_channel(item.channel_id)
             await channel.send("@everyone", embed=item.embed)
+            print(f"Made announcement: {item.embed.title}")
 
     async def on_message(self, message: discord.Message):
         if message.author == self.user:
