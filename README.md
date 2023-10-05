@@ -63,4 +63,4 @@ Deadline events are configured using objects with properties:
 | title | yes | text | Title of the deadline |
 | description | no | text | Description of the deadline |
 | time | yes | text (YYYY-MM-DD HH:MM) | Date and time of the deadline in UTC |
-| announcements | no | list of integers | Amount of minutes an announcement about the event should be made before its start, by default it's 10 |
+| announcements | no | list of integers | Amount of minutes an announcement about the event should be made before its start, by default it's 600, 240 and 120 |
