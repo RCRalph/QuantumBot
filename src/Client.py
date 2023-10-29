@@ -1,4 +1,4 @@
-import discord, aiocron, os, json
+import discord, aiocron, os, json, datetime
 from decouple import config
 from src.Server import Server
 from src.Validator import Validator
@@ -11,7 +11,7 @@ class Client(discord.Client):
     SERVER_DIRECTORY = "servers"
 
     async def on_ready(self):
-        print(f"Logged in as {self.user}!")
+        print(f"{datetime.datetime.now()}: Logged in as {self.user}!")
 
         self.servers_data = {}
         self.load_servers()
@@ -53,10 +53,17 @@ class Client(discord.Client):
                 print()
 
     async def check_for_announcements(self):
-        for item in AnnouncementHandler(self.servers_data).get_announcements():
-            channel = self.get_channel(item.channel_id)
-            await channel.send("@everyone", embed=item.embed)
-            print(f"Made announcement: {item.embed.fields[0].name}")
+        announcements = AnnouncementHandler(self.servers_data).get_announcements()
+
+        if len(announcements):
+            print(f"{datetime.datetime.now()}: Started sending announcements ({len(announcements)}):")
+
+            for item in announcements:
+                channel = self.get_channel(item.channel_id)
+                await channel.send("@everyone", embed=item.embed)
+                print(f"Made announcement: {item.embed.fields[0].name}")
+
+            print()
 
     async def on_message(self, message: discord.Message):
         if message.author == self.user:
