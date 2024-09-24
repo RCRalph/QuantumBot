@@ -74,6 +74,5 @@ class Client(discord.Client):
                 await CommandHandler(message, self.servers_data).handle_message()
             else:
                 await MessageReactionHandler(message, self.servers_data).handle_reaction()
-        except KeyError:
-            pass
-
+        except KeyError as exc:
+            print(exc)
