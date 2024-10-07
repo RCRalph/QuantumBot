@@ -17,10 +17,10 @@ class MessageReactionHandler:
         if self.server.workshop_reaction_channel_id != self.message.channel.id:
             return
 
-        content = self.message.content.capitalize()
+        if "task" not in self.message.content.lower():
+            return
 
-        if content.startswith(self.server.translations.get_translation("task") + ":"):
-            for item in ["🌕", "🌘", "⏲️"]:
-                await self.message.add_reaction(item)
+        for item in ["🌕", "🌘", "⏲️"]:
+            await self.message.add_reaction(item)
 
 
