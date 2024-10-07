@@ -17,10 +17,6 @@ class MessageReactionHandler:
         if self.server.workshop_reaction_channel_id != self.message.channel.id:
             return
 
-        if "task" not in self.message.content.lower():
-            return
-
-        for item in ["🌕", "🌘", "⏲️"]:
-            await self.message.add_reaction(item)
-
-
+        if "task" in self.message.content.lower():
+            for item in ["🌕", "🌘", "⏲️"]:
+                await self.message.add_reaction(item)
