@@ -20,7 +20,7 @@ class MessageReactionHandler:
         content = self.message.content.capitalize()
 
         if content.startswith(self.server.translations.get_translation("task") + ":"):
-            for item in ["🌕", "🌘", "☁️"]:
+            for item in ["🌕", "🌘", "⏲️"]:
                 await self.message.add_reaction(item)
 
 
