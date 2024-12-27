@@ -3,4 +3,4 @@
 **/__pycache__
 servers/*
 !servers/server.json.example
-
+.python-version
