@@ -4,7 +4,7 @@ on: push
 
 jobs:
   pytest:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       PIP_ROOT_USER_ACTION: ignore
 
