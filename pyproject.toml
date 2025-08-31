@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=80.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-bot"
+version = "0.1.0"
+description = "Discord bot for events organized by Quantum AI Foundation"
+readme = "README.md"
+requires-python = ">=3.13"
+license-files = ["LICENSE"]
+
+dependencies = [
+    "pydantic>=2.11.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pre-commit>=4.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.flake8]
+# E501 - Line too long - already handled by black
+# W503 - Line break before binary operator - enforced by black
+# E203 - Whitespace before ':' - enforced by black
+ignore = ["E501", "W503", "E203"]
+
+[tool.isort]
+profile = "black"
+use_parentheses = true
+multi_line_output = 3
+include_trailing_comma = true
+force_alphabetical_sort_within_sections = true
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
