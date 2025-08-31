@@ -1,0 +1,26 @@
+{
+  "weekday": {
+    "monday": "poniedzia\u0142ek",
+    "tuesday": "wtorek",
+    "wednesday": "\u015broda",
+    "thursday": "czwartek",
+    "friday": "pi\u0105tek",
+    "saturday": "sobota",
+    "sunday": "niedziela"
+  },
+  "embed": {
+    "reminder": "Przypomnienie!",
+    "schedule": "Harmonogram",
+    "schedule_today": "Dzisiejszy harmonogram",
+    "schedule_empty": "Harmonogram jest pusty",
+    "schedule_today_empty": "Dzisiejszy harmonogram jest pusty!",
+    "available_commands": "Dost\u0119pne polecenia",
+    "help": "Pomoc",
+    "help_description": "Poka\u017c dost\u0119pne polecenia",
+    "hello_description": "Powitaj u\u017cytkownika",
+    "schedule_description": "Poka\u017c dzisiejszy harmonogram",
+    "schedule_full_description": "Poka\u017c pe\u0142ny harmonogram",
+    "task": "Zadanie",
+    "test": "Je\u015bli widzisz t\u0119 wiadomo\u015b\u0107 oraz jest ona w oczekiwanym j\u0119zyku, to konfiguracja jest poprawna!"
+  }
+}
