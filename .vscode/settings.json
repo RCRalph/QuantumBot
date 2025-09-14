@@ -1,9 +1,10 @@
 {
     "cSpell.words": [
-        "aiocron"
+        "aiocron",
+        "Qiskit"
     ],
     "python.testing.pytestArgs": [
-        "tests"
+        "-vv"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,

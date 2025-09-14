@@ -1,8 +1,13 @@
-from enum import Enum
+from enum import StrEnum
+from functools import cached_property
 
 from language.language_configuration import LanguageConfiguration
 
 
-class Language(Enum):
-    EN = LanguageConfiguration.from_iso_639("en")
-    PL = LanguageConfiguration.from_iso_639("pl")
+class Language(StrEnum):
+    EN = "EN"
+    PL = "PL"
+
+    @cached_property
+    def config(self) -> LanguageConfiguration:
+        return LanguageConfiguration.from_iso_639(self)
