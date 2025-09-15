@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from pydantic import Field, field_validator
 
-from server.event.base_event import BaseEvent
+from server.base_event import BaseEvent
+from server.timezone import Timezone
 
 
 class Deadline(BaseEvent):
@@ -16,8 +17,15 @@ class Deadline(BaseEvent):
         if isinstance(value, datetime):
             return value
 
-        return datetime.strptime(value, cls.DATETIME_FORMAT)
+        return datetime.strptime(value, cls.DATETIME_FORMAT).replace(
+            tzinfo=timezone.utc
+        )
 
     @property
     def reminder_time(self) -> datetime:
         return self.time
+
+    def _get_event_time_text(self, timezone: Timezone) -> str:
+        time_text = self.time.astimezone(timezone.zone_info).strftime(self.TIME_FORMAT)
+
+        return f"{time_text} {timezone.text}"

@@ -9,7 +9,9 @@ from typing import Any, ClassVar, LiteralString, Self
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from language import Language
-from server.event import BaseEvent, Deadline, ScheduleEvent
+from server.base_event import BaseEvent
+from server.deadline import Deadline
+from server.schedule_event import ScheduleEvent
 from server.timezone import Timezone
 
 logger = logging.getLogger(__name__)

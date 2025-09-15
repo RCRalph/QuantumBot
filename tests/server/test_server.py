@@ -1,15 +1,16 @@
 import json
 import logging
 import tempfile
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, cast, Generator
 
 import pytest
 
 from language import Language
-from server.event import Deadline, ScheduleEvent
-from server.event.base_event import BaseEvent
+from server.base_event import BaseEvent
+from server.deadline import Deadline
+from server.schedule_event import ScheduleEvent
 from server.server import Server
 from server.timezone import Timezone
 
@@ -37,35 +38,35 @@ class TestServer:
                 ScheduleEvent(
                     title="Conventional Quantum Algorithms In Qiskit - Part 1",
                     description="- Qiskit introduction\n- Classical gates\n- Phase kickback\n- Deutsch algorithm",
-                    start=datetime(2024, 10, 7, 17, 0),
-                    end=datetime(2024, 10, 7, 20, 0),
+                    start=datetime(2024, 10, 7, 17, 0, tzinfo=timezone.utc),
+                    end=datetime(2024, 10, 7, 20, 0, tzinfo=timezone.utc),
                 ),
                 ScheduleEvent(
                     title="Conventional Quantum Algorithms In Qiskit - Part 2",
                     description="- Simon's algorithm",
-                    start=datetime(2024, 10, 8, 17, 0),
-                    end=datetime(2024, 10, 8, 20, 0),
+                    start=datetime(2024, 10, 8, 17, 0, tzinfo=timezone.utc),
+                    end=datetime(2024, 10, 8, 20, 0, tzinfo=timezone.utc),
                 ),
                 ScheduleEvent(
                     title="Conventional Quantum Algorithms In Qiskit - Part 3",
                     description="- Deutsch-Jozsa algorithm\n- Berenstein-Vazirani algorithm",
-                    start=datetime(2024, 10, 9, 17, 0),
-                    end=datetime(2024, 10, 9, 20, 0),
+                    start=datetime(2024, 10, 9, 17, 0, tzinfo=timezone.utc),
+                    end=datetime(2024, 10, 9, 20, 0, tzinfo=timezone.utc),
                     announcements=[123],
                 ),
             ],
             deadlines=[
                 Deadline(
                     title="Registration",
-                    time=datetime(2024, 10, 7, 10, 0),
+                    time=datetime(2024, 10, 7, 10, 0, tzinfo=timezone.utc),
                 ),
                 Deadline(
                     title="Deadline for submissions",
-                    time=datetime(2024, 10, 10, 10, 0),
+                    time=datetime(2024, 10, 10, 10, 0, tzinfo=timezone.utc),
                 ),
                 Deadline(
                     title="Announcement of results",
-                    time=datetime(2024, 10, 11, 10, 0),
+                    time=datetime(2024, 10, 11, 10, 0, tzinfo=timezone.utc),
                     announcements=[10],
                 ),
             ],
