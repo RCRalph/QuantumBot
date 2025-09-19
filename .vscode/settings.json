@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "aiocron",
+        "caplog",
+        "Messageable",
         "Qiskit"
     ],
     "python.testing.pytestArgs": [

@@ -12,12 +12,16 @@ license-files = ["LICENSE"]
 
 dependencies = [
     "pydantic>=2.11.7",
+    "discord>=2.3.2",
+    "aiocron>=2.1",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3.4",
     "pytest-cov>=6.0.0",
+    "pytest-asyncio>=1.2.0",
+    "freezegun>=1.5.5",
     "pre-commit>=4.1.0",
 ]
 

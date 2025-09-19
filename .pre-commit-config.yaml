@@ -35,4 +35,4 @@ repos:
     hooks:
       - id: mypy
         args: [--check-untyped-defs]
-        additional_dependencies: [pydantic, pytest-mypy-plugins]
+        additional_dependencies: [pydantic, discord, types-freezegun, pytest-mypy-plugins]

@@ -18,7 +18,7 @@ from server.timezone import Timezone
 class TestServer:
     @pytest.fixture
     def server_configuration_json(self) -> dict[str, Any]:
-        server_path = Path.cwd() / "tests" / "assets" / "server.json"
+        server_path = Path.cwd() / "tests" / "assets" / "servers" / "server.json"
 
         return cast(dict[str, Any], json.loads(server_path.read_bytes()))
 
