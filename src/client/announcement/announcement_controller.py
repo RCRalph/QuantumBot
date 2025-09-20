@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import discord
 
-from announcement.announcement import Announcement
+from client.announcement.announcement import Announcement
 
 if TYPE_CHECKING:
     from client import Client

@@ -1,6 +1,6 @@
 import pytest
 
-from announcement.announcement import Announcement
+from client.announcement.announcement import Announcement
 from server import Server
 
 

@@ -4,7 +4,7 @@ import os
 import aiocron
 import discord
 
-from announcement import AnnouncementController
+from client.announcement import AnnouncementController
 from server import Server
 
 logger = logging.getLogger(__name__)

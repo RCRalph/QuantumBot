@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from discord import Intents
 
-from announcement.announcement_controller import AnnouncementController
+from client.announcement import AnnouncementController
 from client.client import Client
 from server import Server
 
@@ -23,7 +23,7 @@ class TestClient:
     @pytest.mark.asyncio
     @patch("aiocron.crontab")
     @patch("server.Server.from_directory")
-    @patch("announcement.AnnouncementController.__new__")
+    @patch("client.announcement.AnnouncementController.__new__")
     async def test_on_ready(
         self,
         mock_announcement_controller: MagicMock,
