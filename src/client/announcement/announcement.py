@@ -6,7 +6,7 @@ from server import BaseEvent, Server
 
 
 class Announcement:
-    EMBED_COLOR = 0x2F3855
+    EMBED_COLOUR = 0x2F3855
 
     def __init__(self, server: Server, event: BaseEvent):
         self._server = server
@@ -15,7 +15,7 @@ class Announcement:
     @property
     def embed(self) -> discord.Embed:
         result = discord.Embed(
-            title=self._server.language.config.embed.reminder, colour=self.EMBED_COLOR
+            title=self._server.language.config.embed.reminder, colour=self.EMBED_COLOUR
         )
 
         result.add_field(

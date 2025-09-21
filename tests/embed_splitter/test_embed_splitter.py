@@ -9,7 +9,7 @@ from embed_splitter.embed_splitter import EmbedSplitter
 
 @pytest.mark.parametrize("embed_title", ["Some embed title", None])
 class TestEmbedSplitter:
-    EXAMPLE_EMBED_COLOR = 0x2F3855
+    EXAMPLE_EMBED_COLOUR = 0x2F3855
 
     @staticmethod
     def _get_embed_length(embed: discord.Embed) -> int:
@@ -38,7 +38,7 @@ class TestEmbedSplitter:
     def _get_expected_embed(
         cls, title: str | None, fields: list[EmbedField]
     ) -> discord.Embed:
-        expected_embed = discord.Embed(title=title, colour=cls.EXAMPLE_EMBED_COLOR)
+        expected_embed = discord.Embed(title=title, colour=cls.EXAMPLE_EMBED_COLOUR)
 
         for field in fields:
             expected_embed.add_field(
@@ -49,7 +49,7 @@ class TestEmbedSplitter:
 
     @pytest.fixture
     def example_embed(self, embed_title: str | None) -> discord.Embed:
-        return discord.Embed(title=embed_title, colour=self.EXAMPLE_EMBED_COLOR)
+        return discord.Embed(title=embed_title, colour=self.EXAMPLE_EMBED_COLOUR)
 
     def test_iter(self, example_embed: discord.Embed, embed_title: str | None) -> None:
         # Arrange

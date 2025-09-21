@@ -12,7 +12,7 @@ class TestAnnouncement:
     def test_embed(self, example_announcement: Announcement) -> None:
         # Arrange
         expected_embed_content = {
-            "color": Announcement.EMBED_COLOR,
+            "color": Announcement.EMBED_COLOUR,
             "fields": [
                 {
                     "inline": False,
