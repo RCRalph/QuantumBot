@@ -35,7 +35,8 @@ where = ["src"]
 # E501 - Line too long - already handled by black
 # W503 - Line break before binary operator - enforced by black
 # E203 - Whitespace before ':' - enforced by black
-ignore = ["E501", "W503", "E203"]
+# E226 - Whitespace around arithmetic operator - enforced by black
+ignore = ["E501", "W503", "E203", "E226"]
 
 [tool.isort]
 profile = "black"

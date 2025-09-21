@@ -15,7 +15,7 @@ class Announcement:
     @property
     def embed(self) -> discord.Embed:
         result = discord.Embed(
-            title=self._server.language.config.embed.reminder, color=self.EMBED_COLOR
+            title=self._server.language.config.embed.reminder, colour=self.EMBED_COLOR
         )
 
         result.add_field(

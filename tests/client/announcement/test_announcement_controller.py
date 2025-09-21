@@ -34,7 +34,7 @@ class TestAnnouncementController:
         mock_channel = MagicMock(discord.abc.Messageable)
         mock_announcement_client.get_channel.return_value = mock_channel  # type: ignore
 
-        expected_embed = discord.Embed(title="Reminder!", color=0x2F3855)
+        expected_embed = discord.Embed(title="Reminder!", colour=0x2F3855)
         expected_embed.add_field(
             name="Conventional Quantum Algorithms In Qiskit - Part 1: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
             value="- Qiskit introduction\n- Classical gates\n- Phase kickback\n- Deutsch algorithm",
@@ -69,14 +69,14 @@ class TestAnnouncementController:
         mock_channel = MagicMock(discord.abc.Messageable)
         mock_announcement_client.get_channel.return_value = mock_channel  # type: ignore
 
-        expected_first_embed = discord.Embed(title="Reminder!", color=0x2F3855)
+        expected_first_embed = discord.Embed(title="Reminder!", colour=0x2F3855)
         expected_first_embed.add_field(
             name="Conventional Quantum Algorithms In Qiskit - Part 2: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
             value="- Simon's algorithm",
             inline=False,
         )
 
-        expected_second_embed = discord.Embed(title="Reminder!", color=0x2F3855)
+        expected_second_embed = discord.Embed(title="Reminder!", colour=0x2F3855)
         expected_second_embed.add_field(
             name="Some other event: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
             value="- Simon's algorithm",
