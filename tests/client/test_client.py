@@ -6,6 +6,7 @@ from discord import Intents
 
 from client.announcement import AnnouncementController
 from client.client import Client
+from client.reaction import ReactionController
 from server import Server
 
 
@@ -20,21 +21,29 @@ class TestClient:
     ) -> AnnouncementController:
         return AnnouncementController(example_client)
 
+    @pytest.fixture
+    def example_reaction_controller(self, example_client: Client) -> ReactionController:
+        return ReactionController(example_client)
+
     @pytest.mark.asyncio
     @patch("aiocron.crontab")
     @patch("server.Server.from_directory")
     @patch("client.announcement.AnnouncementController.__new__")
+    @patch("client.reaction.ReactionController.__new__")
     async def test_on_ready(
         self,
+        mock_reaction_controller: MagicMock,
         mock_announcement_controller: MagicMock,
         mock_server_from_directory: MagicMock,
         mock_aiocron_crontab: MagicMock,
         example_client: Client,
         example_announcement_controller: AnnouncementController,
+        example_reaction_controller: ReactionController,
         example_server: Server,
         caplog: pytest.LogCaptureFixture,
     ) -> None:
         # Arrange
+        mock_reaction_controller.return_value = example_reaction_controller
         mock_announcement_controller.return_value = example_announcement_controller
         mock_server_from_directory.return_value = {
             example_server.server_id: example_server
@@ -53,6 +62,9 @@ class TestClient:
 
         mock_announcement_controller.assert_called_once_with(
             AnnouncementController, example_client
+        )
+        mock_reaction_controller.assert_called_once_with(
+            ReactionController, example_client
         )
 
         mock_server_from_directory.assert_called_once_with()

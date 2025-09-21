@@ -8,6 +8,9 @@
     "saturday": "sobota",
     "sunday": "niedziela"
   },
+  "message": {
+    "test": "Je\u015bli widzisz t\u0119 wiadomo\u015b\u0107 oraz jest ona w oczekiwanym j\u0119zyku, to konfiguracja jest poprawna!"
+  },
   "embed": {
     "reminder": "Przypomnienie!",
     "schedule": "Harmonogram",
@@ -19,8 +22,6 @@
     "help_description": "Poka\u017c dost\u0119pne polecenia",
     "hello_description": "Powitaj u\u017cytkownika",
     "schedule_description": "Poka\u017c dzisiejszy harmonogram",
-    "schedule_full_description": "Poka\u017c pe\u0142ny harmonogram",
-    "task": "Zadanie",
-    "test": "Je\u015bli widzisz t\u0119 wiadomo\u015b\u0107 oraz jest ona w oczekiwanym j\u0119zyku, to konfiguracja jest poprawna!"
+    "schedule_full_description": "Poka\u017c pe\u0142ny harmonogram"
   }
 }

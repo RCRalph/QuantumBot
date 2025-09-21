@@ -10,6 +10,7 @@ import pytest
 from language import Language
 from server.base_event import BaseEvent
 from server.deadline import Deadline
+from server.reaction import Reaction
 from server.schedule_event import ScheduleEvent
 from server.server import Server
 from server.timezone import Timezone
@@ -28,7 +29,7 @@ class TestServer:
             name="QNickel16",
             server_id=12345,
             announcement_channel_id=54321,
-            workshop_reaction_channel_id=12321,
+            reactions={12321: Reaction(prompt_text="Task", emojis=["🌕", "🌘", "⏲️"])},
             language=Language.EN,
             timezones=[
                 Timezone(name="UTC", text="UTC"),

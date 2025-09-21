@@ -4,6 +4,7 @@ from typing import ClassVar
 from pydantic import BaseModel, ConfigDict
 
 from language.embed import Embed
+from language.message import Message
 from language.weekday import Weekday
 
 
@@ -13,6 +14,7 @@ class LanguageConfiguration(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     weekday: Weekday
+    message: Message
     embed: Embed
 
     @classmethod

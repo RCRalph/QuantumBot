@@ -5,6 +5,7 @@ import aiocron
 import discord
 
 from client.announcement import AnnouncementController
+from client.reaction import ReactionController
 from server import Server
 
 logger = logging.getLogger(__name__)
@@ -22,3 +23,5 @@ class Client(discord.Client):
         self._announcement_cron = aiocron.crontab(
             "* * * * *", self._announcement_controller.send_announcements
         )
+
+        self._reaction_controller = ReactionController(self)

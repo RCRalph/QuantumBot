@@ -15,5 +15,3 @@ class Embed(BaseModel):
     hello_description: str
     schedule_description: str
     schedule_full_description: str
-    task: str
-    test: str

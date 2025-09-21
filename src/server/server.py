@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from language import Language
 from server.base_event import BaseEvent
 from server.deadline import Deadline
+from server.reaction import Reaction
 from server.schedule_event import ScheduleEvent
 from server.timezone import Timezone
 
@@ -24,7 +25,7 @@ class Server(BaseModel):
     name: str
     server_id: int
     announcement_channel_id: int
-    workshop_reaction_channel_id: int | None = Field(default=None)
+    reactions: dict[int, Reaction] = Field(default_factory=dict)
     language: Language
     timezones: list[Timezone] = Field(alias="timezones")
     schedule: list[ScheduleEvent] = Field(default_factory=list)

@@ -8,6 +8,9 @@
     "saturday": "saturday",
     "sunday": "sunday"
   },
+  "message": {
+    "test": "If you can see this message and it's in the expected language, that means the configuration is correct!"
+  },
   "embed": {
     "reminder": "Reminder!",
     "schedule": "Schedule",
@@ -19,8 +22,6 @@
     "help_description": "Show available commands",
     "hello_description": "Greet the user",
     "schedule_description": "Show today's schedule",
-    "schedule_full_description": "Show full schedule",
-    "task": "Task",
-    "test": "If you can see this message and it's in the expected language, that means the configuration is correct!"
+    "schedule_full_description": "Show full schedule"
   }
 }
