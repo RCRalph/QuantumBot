@@ -61,12 +61,19 @@ class TestScheduleEvent:
         with pytest.raises(ValueError, match=expected_error_message):
             ScheduleEvent.model_validate(schedule_event_json)
 
-    def test_reminder_time(self, example_schedule_event: ScheduleEvent) -> None:
+    def test_start_time(self, example_schedule_event: ScheduleEvent) -> None:
         # Act
-        reminder_time = example_schedule_event.reminder_time
+        start_time = example_schedule_event.start_time
 
         # Assert
-        assert reminder_time == example_schedule_event.start
+        assert start_time == example_schedule_event.start
+
+    def test_end_time(self, example_schedule_event: ScheduleEvent) -> None:
+        # Act
+        end_time = example_schedule_event.end_time
+
+        # Assert
+        assert end_time == example_schedule_event.end
 
     @pytest.mark.parametrize(
         ("timezones", "expected_title"),

@@ -40,12 +40,19 @@ class TestScheduleEvent:
         # Assert
         assert schedule_event == example_deadline
 
-    def test_reminder_time(self, example_deadline: Deadline) -> None:
+    def test_start_time(self, example_deadline: Deadline) -> None:
         # Act
-        reminder_time = example_deadline.reminder_time
+        start_time = example_deadline.start_time
 
         # Assert
-        assert reminder_time == example_deadline.time
+        assert start_time == example_deadline.time
+
+    def test_end_time(self, example_deadline: Deadline) -> None:
+        # Act
+        end_time = example_deadline.end_time
+
+        # Assert
+        assert end_time == example_deadline.time
 
     @pytest.mark.parametrize(
         ("timezones", "expected_title"),

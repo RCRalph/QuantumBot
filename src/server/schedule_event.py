@@ -42,8 +42,12 @@ class ScheduleEvent(BaseEvent):
         return self
 
     @property
-    def reminder_time(self) -> datetime:
+    def start_time(self) -> datetime:
         return self.start
+
+    @property
+    def end_time(self) -> datetime:
+        return self.end
 
     def _get_event_time_text(self, timezone: Timezone) -> str:
         start_datetime = self.start.astimezone(timezone.zone_info)

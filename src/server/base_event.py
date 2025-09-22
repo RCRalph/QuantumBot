@@ -17,7 +17,11 @@ class BaseEvent(BaseModel, ABC):
 
     @property
     @abstractmethod
-    def reminder_time(self) -> datetime: ...  # noqa: E704
+    def start_time(self) -> datetime: ...  # noqa: E704
+
+    @property
+    @abstractmethod
+    def end_time(self) -> datetime: ...  # noqa: E704
 
     @abstractmethod
     def _get_event_time_text(self, timezone: Timezone) -> str: ...  # noqa: E704

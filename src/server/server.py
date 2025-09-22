@@ -4,10 +4,11 @@ from datetime import date
 from functools import cached_property
 from itertools import chain
 from pathlib import Path
-from typing import Any, ClassVar, LiteralString, Self
+from typing import Any, ClassVar, Generator, LiteralString, Self
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from embed_splitter import EmbedField
 from language import Language
 from server.base_event import BaseEvent
 from server.deadline import Deadline
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class Server(BaseModel):
     DEFAULT_SERVERS_DIRECTORY: ClassVar[Path] = Path.cwd() / "servers"
-    DATE_EMBED_NAME_TITLE: ClassVar[LiteralString] = "━━━━━━      {date}      ━━━━━━"
+    HEADER_PREFIX: ClassVar[LiteralString] = "━━━━━━"
 
     name: str
     server_id: int
@@ -63,15 +64,13 @@ class Server(BaseModel):
 
     @cached_property
     def events(self) -> list[BaseEvent]:
-        return sorted(
-            chain(self.schedule, self.deadlines), key=lambda x: x.reminder_time
-        )
+        return sorted(chain(self.schedule, self.deadlines), key=lambda x: x.start_time)
 
     @cached_property
     def events_by_date(self) -> dict[date, list[BaseEvent]]:
         result = defaultdict(list)
         for event in self.events:
-            result[event.reminder_time.date()].append(event)
+            result[event.start_time.date()].append(event)
 
         return dict(result)
 
@@ -101,3 +100,46 @@ class Server(BaseModel):
         logger.info("Successfully loaded %s servers", len(servers))
 
         return servers
+
+    def _get_header_for_day(self, day: date) -> str:
+        return f"{self.HEADER_PREFIX}      {day.isoformat()}      {self.HEADER_PREFIX}"
+
+    def _get_event_span_text(self, events: list[BaseEvent]) -> str:
+        start_time = min(event.start_time for event in events)
+        end_time = max(event.end_time for event in events)
+
+        event: BaseEvent
+        if start_time == end_time:
+            event = Deadline(title="", time=start_time)
+        else:
+            event = ScheduleEvent(title="", start=start_time, end=end_time)
+
+        return event.get_embed_value(self.timezones)
+
+    def get_full_schedule_embed_fields(self) -> Generator[EmbedField, None, None]:
+        if not self.events:
+            yield EmbedField(name=self.language.config.embed.schedule_empty, value="")
+            return
+
+        for event_date, events in self.events_by_date.items():
+            yield EmbedField(
+                name=self._get_header_for_day(event_date),
+                value=self._get_event_span_text(events),
+            )
+
+            yield from self.get_todays_schedule_embed_fields(event_date)
+
+    def get_todays_schedule_embed_fields(
+        self, event_date: date
+    ) -> Generator[EmbedField, None, None]:
+        if not (events := self.events_by_date.get(event_date)):
+            yield EmbedField(
+                name=self.language.config.embed.schedule_today_empty, value=""
+            )
+            return
+
+        for event in events:
+            yield EmbedField(
+                name=event.get_embed_name(self.timezones),
+                value=event.get_embed_value(self.timezones),
+            )

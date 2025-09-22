@@ -25,7 +25,7 @@ class AnnouncementController:
             for server in self.client.servers.values()
             for event in server.events
             for announcement in event.announcements
-            if current_datetime + timedelta(minutes=announcement) == event.reminder_time
+            if current_datetime + timedelta(minutes=announcement) == event.start_time
         }
 
     async def send_announcements(self) -> None:

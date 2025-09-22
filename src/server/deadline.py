@@ -22,7 +22,11 @@ class Deadline(BaseEvent):
         )
 
     @property
-    def reminder_time(self) -> datetime:
+    def start_time(self) -> datetime:
+        return self.time
+
+    @property
+    def end_time(self) -> datetime:
         return self.time
 
     def _get_event_time_text(self, timezone: Timezone) -> str:
