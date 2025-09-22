@@ -5,6 +5,7 @@ import aiocron
 import discord
 
 from client.announcement import AnnouncementController
+from client.command import CommandController
 from client.reaction import ReactionController
 from server import Server
 
@@ -25,3 +26,5 @@ class Client(discord.Client):
         )
 
         self._reaction_controller = ReactionController(self)
+
+        self._command_controller = CommandController(self)

@@ -18,53 +18,6 @@ from server.timezone import Timezone
 
 
 class TestServer:
-    EXPECTED_FULL_SCHEDULE_EMBED_FIELDS: list[EmbedField] = [
-        EmbedField(
-            name="━━━━━━      2024-10-07      ━━━━━━",
-            value="10:00 → 20:00 UTC | 12:00 → 22:00 CET",
-        ),
-        EmbedField(
-            name="Registration",
-            value="10:00 UTC | 12:00 CET",
-        ),
-        EmbedField(
-            name="Conventional Quantum Algorithms In Qiskit - Part 1: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
-            value="- Qiskit introduction\n- Classical gates\n- Phase kickback\n- Deutsch algorithm",
-        ),
-        EmbedField(
-            name="━━━━━━      2024-10-08      ━━━━━━",
-            value="17:00 → 20:00 UTC | 19:00 → 22:00 CET",
-        ),
-        EmbedField(
-            name="Conventional Quantum Algorithms In Qiskit - Part 2: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
-            value="- Simon's algorithm",
-        ),
-        EmbedField(
-            name="━━━━━━      2024-10-09      ━━━━━━",
-            value="17:00 → 20:00 UTC | 19:00 → 22:00 CET",
-        ),
-        EmbedField(
-            name="Conventional Quantum Algorithms In Qiskit - Part 3: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
-            value="- Deutsch-Jozsa algorithm\n- Berenstein-Vazirani algorithm",
-        ),
-        EmbedField(
-            name="━━━━━━      2024-10-10      ━━━━━━",
-            value="10:00 UTC | 12:00 CET",
-        ),
-        EmbedField(
-            name="Deadline for submissions",
-            value="10:00 UTC | 12:00 CET",
-        ),
-        EmbedField(
-            name="━━━━━━      2024-10-11      ━━━━━━",
-            value="10:00 UTC | 12:00 CET",
-        ),
-        EmbedField(
-            name="Announcement of results",
-            value="10:00 UTC | 12:00 CET",
-        ),
-    ]
-
     @pytest.fixture
     def server_configuration_json(self) -> dict[str, Any]:
         server_path = Path.cwd() / "tests" / "assets" / "servers" / "server.json"
@@ -281,12 +234,16 @@ class TestServer:
         assert len(exc_info.value.exceptions) == 1
         assert expected_error_message in str(exc_info.value.exceptions[0])
 
-    def test_get_full_schedule_embed_fields(self, example_server: Server) -> None:
+    def test_get_full_schedule_embed_fields(
+        self,
+        example_server: Server,
+        example_full_schedule_embed_fields: list[EmbedField],
+    ) -> None:
         # Act
         embed_fields = list(example_server.get_full_schedule_embed_fields())
 
         # Assert
-        assert embed_fields == self.EXPECTED_FULL_SCHEDULE_EMBED_FIELDS
+        assert embed_fields == example_full_schedule_embed_fields
 
     def test_get_full_schedule_embed_fields_empty_schedule(
         self, example_server: Server
@@ -306,27 +263,56 @@ class TestServer:
         [
             pytest.param(
                 date(2024, 10, 7),
-                EXPECTED_FULL_SCHEDULE_EMBED_FIELDS[1:3],
+                [
+                    EmbedField(
+                        name="Registration",
+                        value="10:00 UTC | 12:00 CET",
+                    ),
+                    EmbedField(
+                        name="Conventional Quantum Algorithms In Qiskit - Part 1: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
+                        value="- Qiskit introduction\n- Classical gates\n- Phase kickback\n- Deutsch algorithm",
+                    ),
+                ],
                 id="2024-10-07",
             ),
             pytest.param(
                 date(2024, 10, 8),
-                [EXPECTED_FULL_SCHEDULE_EMBED_FIELDS[4]],
+                [
+                    EmbedField(
+                        name="Conventional Quantum Algorithms In Qiskit - Part 2: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
+                        value="- Simon's algorithm",
+                    )
+                ],
                 id="2024-10-08",
             ),
             pytest.param(
                 date(2024, 10, 9),
-                [EXPECTED_FULL_SCHEDULE_EMBED_FIELDS[6]],
+                [
+                    EmbedField(
+                        name="Conventional Quantum Algorithms In Qiskit - Part 3: 17:00 → 20:00 UTC | 19:00 → 22:00 CET",
+                        value="- Deutsch-Jozsa algorithm\n- Berenstein-Vazirani algorithm",
+                    ),
+                ],
                 id="2024-10-09",
             ),
             pytest.param(
                 date(2024, 10, 10),
-                [EXPECTED_FULL_SCHEDULE_EMBED_FIELDS[8]],
+                [
+                    EmbedField(
+                        name="Deadline for submissions",
+                        value="10:00 UTC | 12:00 CET",
+                    ),
+                ],
                 id="2024-10-10",
             ),
             pytest.param(
                 date(2024, 10, 11),
-                [EXPECTED_FULL_SCHEDULE_EMBED_FIELDS[10]],
+                [
+                    EmbedField(
+                        name="Announcement of results",
+                        value="10:00 UTC | 12:00 CET",
+                    )
+                ],
                 id="2024-10-11",
             ),
         ],

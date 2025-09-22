@@ -6,6 +6,7 @@ from discord import Intents
 
 from client.announcement import AnnouncementController
 from client.client import Client
+from client.command import CommandController
 from client.reaction import ReactionController
 from server import Server
 
@@ -25,13 +26,19 @@ class TestClient:
     def example_reaction_controller(self, example_client: Client) -> ReactionController:
         return ReactionController(example_client)
 
+    @pytest.fixture
+    def example_command_controller(self, example_client: Client) -> CommandController:
+        return CommandController(example_client)
+
     @pytest.mark.asyncio
     @patch("aiocron.crontab")
     @patch("server.Server.from_directory")
     @patch("client.announcement.AnnouncementController.__new__")
     @patch("client.reaction.ReactionController.__new__")
+    @patch("client.command.CommandController.__new__")
     async def test_on_ready(
         self,
+        mock_command_controller: MagicMock,
         mock_reaction_controller: MagicMock,
         mock_announcement_controller: MagicMock,
         mock_server_from_directory: MagicMock,
@@ -39,10 +46,12 @@ class TestClient:
         example_client: Client,
         example_announcement_controller: AnnouncementController,
         example_reaction_controller: ReactionController,
+        example_command_controller: CommandController,
         example_server: Server,
         caplog: pytest.LogCaptureFixture,
     ) -> None:
         # Arrange
+        mock_command_controller.return_value = example_command_controller
         mock_reaction_controller.return_value = example_reaction_controller
         mock_announcement_controller.return_value = example_announcement_controller
         mock_server_from_directory.return_value = {
@@ -65,6 +74,9 @@ class TestClient:
         )
         mock_reaction_controller.assert_called_once_with(
             ReactionController, example_client
+        )
+        mock_command_controller.assert_called_once_with(
+            CommandController, example_client
         )
 
         mock_server_from_directory.assert_called_once_with()
