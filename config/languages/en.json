@@ -1,0 +1,27 @@
+{
+  "weekday": {
+    "monday": "monday",
+    "tuesday": "tuesday",
+    "wednesday": "wednesday",
+    "thursday": "thursday",
+    "friday": "friday",
+    "saturday": "saturday",
+    "sunday": "sunday"
+  },
+  "message": {
+    "test": "If you can see this message and it's in the expected language, that means the configuration is correct!"
+  },
+  "embed": {
+    "reminder": "Reminder!",
+    "schedule": "Schedule",
+    "schedule_today": "Today's schedule",
+    "schedule_empty": "Schedule is empty!",
+    "schedule_today_empty": "Today's schedule is empty!",
+    "available_commands": "Available commands",
+    "help": "Help",
+    "help_description": "Show available commands",
+    "hello_description": "Greet the user",
+    "schedule_description": "Show today's schedule",
+    "schedule_full_description": "Show full schedule"
+  }
+}

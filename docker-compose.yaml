@@ -1,0 +1,9 @@
+services:
+  bot:
+    container_name: quantum-bot
+    build: .
+    environment:
+      - BOT_PREFIX=${BOT_PREFIX}
+      - BOT_TOKEN=${BOT_TOKEN}
+    volumes:
+      - ${LOCAL_CONFIG_DIRECTORY_PATH}:/app/config

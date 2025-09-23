@@ -1,0 +1,36 @@
+{
+  "name": "",
+    "server_id": 0,
+    "announcement_channel_id": 0,
+  "reactions": {
+    "12321": {
+      "prompt_text": "Task",
+      "emojis": [
+        "\ud83c\udf15",
+        "\ud83c\udf18",
+        "\u23f2\ufe0f"
+      ]
+    }
+  },
+  "language": "EN",
+  "timezones": [
+    "UTC"
+  ],
+    "schedule": [
+        {
+            "title": "",
+            "description": "",
+            "start": "1970-01-01 00:00",
+            "end": "1970-01-01 23:59",
+            "announcements": [10]
+        }
+    ],
+    "deadlines": [
+        {
+            "title": "",
+            "description": "",
+            "time": "1970-01-01 00:00",
+            "announcements": [600, 300, 120]
+        }
+    ]
+}

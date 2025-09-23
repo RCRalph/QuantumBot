@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "aiocron",
+        "caplog",
+        "Messageable",
+        "Qiskit",
+        "reactable"
+    ],
+    "python.testing.pytestArgs": [
+        "-vv"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+}

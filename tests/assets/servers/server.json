@@ -1,0 +1,60 @@
+{
+  "name": "QNickel16",
+  "server_id": 12345,
+  "announcement_channel_id": 54321,
+  "reactions": {
+    "12321": {
+      "prompt_text": "Task",
+      "emojis": [
+        "\ud83c\udf15",
+        "\ud83c\udf18",
+        "\u23f2\ufe0f"
+      ]
+    }
+  },
+  "language": "EN",
+  "timezones": [
+    "UTC",
+    "CET"
+  ],
+  "schedule": [
+    {
+      "title": "Conventional Quantum Algorithms In Qiskit - Part 1",
+      "description": "- Qiskit introduction\n- Classical gates\n- Phase kickback\n- Deutsch algorithm",
+      "start": "2024-10-07 17:00",
+      "end": "2024-10-07 20:00"
+    },
+    {
+      "title": "Conventional Quantum Algorithms In Qiskit - Part 2",
+      "description": "- Simon's algorithm",
+      "start": "2024-10-08 17:00",
+      "end": "2024-10-08 20:00"
+    },
+    {
+      "title": "Conventional Quantum Algorithms In Qiskit - Part 3",
+      "description": "- Deutsch-Jozsa algorithm\n- Berenstein-Vazirani algorithm",
+      "start": "2024-10-09 17:00",
+      "end": "2024-10-09 20:00",
+      "announcements": [
+        123
+      ]
+    }
+  ],
+  "deadlines": [
+    {
+      "title": "Registration",
+      "time": "2024-10-07 10:00"
+    },
+    {
+      "title": "Deadline for submissions",
+      "time": "2024-10-10 10:00"
+    },
+    {
+      "title": "Announcement of results",
+      "time": "2024-10-11 10:00",
+      "announcements": [
+        10
+      ]
+    }
+  ]
+}

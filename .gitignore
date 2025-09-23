@@ -1,6 +1,5 @@
-.venv
 .env
-**/__pycache__
-servers/*
-!servers/server.json.example
+__pycache__
 .python-version
+*.egg-info
+.coverage
