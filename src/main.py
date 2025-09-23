@@ -1,8 +1,16 @@
+import logging
 import os
+import sys
 
 import discord
 
 from client import Client
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    stream=sys.stdout,
+)
 
 
 def main() -> None:
