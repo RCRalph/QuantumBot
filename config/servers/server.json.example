@@ -1,9 +1,21 @@
 {
-    "name": "",
+  "name": "",
     "server_id": 0,
     "announcement_channel_id": 0,
-    "language": "EN",
-    "timezones": [],
+  "reactions": {
+    "12321": {
+      "prompt_text": "Task",
+      "emojis": [
+        "\ud83c\udf15",
+        "\ud83c\udf18",
+        "\u23f2\ufe0f"
+      ]
+    }
+  },
+  "language": "EN",
+  "timezones": [
+    "UTC"
+  ],
     "schedule": [
         {
             "title": "",

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class Server(BaseModel):
-    DEFAULT_SERVERS_DIRECTORY: ClassVar[Path] = Path.cwd() / "servers"
+    DEFAULT_SERVERS_DIRECTORY: ClassVar[Path] = Path.cwd() / "config" / "servers"
     HEADER_PREFIX: ClassVar[LiteralString] = "━━━━━━"
 
     name: str
