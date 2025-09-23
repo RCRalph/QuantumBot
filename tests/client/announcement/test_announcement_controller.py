@@ -14,7 +14,7 @@ from server import Server
 class TestAnnouncementController:
     @pytest.fixture
     def mock_announcement_client(
-        self, mock_client: Client, example_server: Server
+        self, mock_client: MagicMock, example_server: Server
     ) -> Client:
         other_server = example_server.model_copy()
         other_server.announcement_channel_id = 1234567890

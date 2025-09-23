@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock
 
@@ -6,26 +5,41 @@ import discord
 import pytest
 from freezegun import freeze_time
 
-from client.client import Client
 from client.command.command_controller import CommandController
 from embed_splitter.embed_field import EmbedField
+from server import Server
 
 
 class TestCommandController:
-    EXAMPLE_SERVER_ID = 12345
-
-    @pytest.mark.asyncio
-    async def test_reply_test(self, mock_client: Client) -> None:
+    @pytest.mark.parametrize(
+        ("message_content", "expected_result"),
+        [
+            ("!test", True),
+            ("!schedule", True),
+            ("!schedule full", True),
+            ("Example message", False),
+        ],
+    )
+    def test_is_command(self, message_content: str, expected_result: bool) -> None:
         # Arrange
         mock_message = MagicMock(discord.Message)
-        mock_message.guild.id = self.EXAMPLE_SERVER_ID
+        mock_message.content = message_content
+
+        # Act
+        is_command = CommandController.is_command(mock_message)
+
+        # Assert
+        assert is_command is expected_result
+
+    @pytest.mark.asyncio
+    async def test_reply_test(self, example_server: Server) -> None:
+        # Arrange
+        mock_message = MagicMock(discord.Message)
         mock_message.channel.send = AsyncMock()
         mock_message.content = "!test"
 
-        controller = CommandController(mock_client)
-
         # Act
-        await controller.reply(mock_message)
+        await CommandController.reply(mock_message, example_server)
 
         # Assert
         mock_message.channel.send.assert_awaited_once_with(
@@ -40,13 +54,12 @@ class TestCommandController:
     )
     async def test_reply_schedule_full(
         self,
-        mock_client: Client,
         command: str,
         example_full_schedule_embed_fields: list[EmbedField],
+        example_server: Server,
     ) -> None:
         # Arrange
         mock_message = MagicMock(discord.Message)
-        mock_message.guild.id = self.EXAMPLE_SERVER_ID
         mock_message.channel.send = AsyncMock()
         mock_message.content = command
 
@@ -58,10 +71,8 @@ class TestCommandController:
                 name=field.name, value=field.value, inline=field.inline
             )
 
-        controller = CommandController(mock_client)
-
         # Act
-        await controller.reply(mock_message)
+        await CommandController.reply(mock_message, example_server)
 
         # Assert
         mock_message.channel.send.assert_awaited_once_with(embed=expected_embed)
@@ -74,13 +85,12 @@ class TestCommandController:
     )
     async def test_reply_schedule_today(
         self,
-        mock_client: Client,
+        example_server: Server,
         command: str,
         example_full_schedule_embed_fields: list[EmbedField],
     ) -> None:
         # Arrange
         mock_message = MagicMock(discord.Message)
-        mock_message.guild.id = self.EXAMPLE_SERVER_ID
         mock_message.channel.send = AsyncMock()
         mock_message.content = command
 
@@ -92,66 +102,21 @@ class TestCommandController:
                 name=field.name, value=field.value, inline=field.inline
             )
 
-        controller = CommandController(mock_client)
-
         # Act
-        await controller.reply(mock_message)
+        await CommandController.reply(mock_message, example_server)
 
         # Assert
         mock_message.channel.send.assert_awaited_once_with(embed=expected_embed)
 
     @pytest.mark.asyncio
-    async def test_reply_unknown_command(self, mock_client: Client) -> None:
+    async def test_reply_unknown_command(self, example_server: Server) -> None:
         # Arrange
         mock_message = MagicMock(discord.Message)
-        mock_message.guild.id = self.EXAMPLE_SERVER_ID
         mock_message.channel.send = AsyncMock()
         mock_message.content = "!unknown"
 
-        controller = CommandController(mock_client)
-
         # Act
-        await controller.reply(mock_message)
+        await CommandController.reply(mock_message, example_server)
 
         # Assert
-        mock_message.channel.send.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_reply_message_guild_not_found(
-        self, mock_client: Client, caplog: pytest.LogCaptureFixture
-    ) -> None:
-        # Arrange
-        mock_message = MagicMock(discord.Message)
-        mock_message.guild = None
-
-        expected_log_message = "Message guild not found"
-
-        controller = CommandController(mock_client)
-
-        # Act
-        with caplog.at_level(logging.WARNING, "client.command.command_controller"):
-            await controller.reply(mock_message)
-
-        # Assert
-        assert expected_log_message in caplog.text
-        mock_message.channel.send.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_reply_server_not_found(
-        self, mock_client: Client, caplog: pytest.LogCaptureFixture
-    ) -> None:
-        # Arrange
-        mock_message = MagicMock(discord.Message)
-        mock_message.guild.id = self.EXAMPLE_SERVER_ID * 2
-
-        expected_log_message = f"Server {self.EXAMPLE_SERVER_ID * 2} not found"
-
-        controller = CommandController(mock_client)
-
-        # Act
-        with caplog.at_level(logging.WARNING, "client.reaction.reaction_controller"):
-            await controller.reply(mock_message)
-
-        # Assert
-        assert expected_log_message in caplog.text
         mock_message.channel.send.assert_not_called()

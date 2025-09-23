@@ -1,33 +1,21 @@
 import logging
-from typing import TYPE_CHECKING
 
 import discord
 
-if TYPE_CHECKING:
-    from client.client import Client
-
+from server import Server
 
 logger = logging.getLogger(__name__)
 
 
 class ReactionController:
-    def __init__(self, client: "Client"):
-        self.client = client
-
-    async def add_reactions(self, message: discord.Message) -> None:
-        if message.guild is None:
-            logger.warning("Message guild not found")
-            return
-
-        if (server := self.client.servers.get(message.guild.id)) is None:
-            logger.warning("Server %s not found", message.guild.id)
-            return
-
+    @classmethod
+    def is_reactable(cls, message: discord.Message, server: Server) -> bool:
         if (reaction := server.reactions.get(message.channel.id)) is None:
-            return
+            return False
 
-        if reaction.prompt_text.lower() not in message.content.lower():
-            return
+        return reaction.prompt_text.lower() in message.content.lower()
 
-        for emoji in reaction.emojis:
+    @classmethod
+    async def add_reactions(cls, message: discord.Message, server: Server) -> None:
+        for emoji in server.reactions[message.channel.id].emojis:
             await message.add_reaction(emoji)

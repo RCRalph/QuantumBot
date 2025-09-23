@@ -3,7 +3,8 @@
         "aiocron",
         "caplog",
         "Messageable",
-        "Qiskit"
+        "Qiskit",
+        "reactable"
     ],
     "python.testing.pytestArgs": [
         "-vv"

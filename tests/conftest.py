@@ -11,7 +11,7 @@ SERVERS_PATH = Path.cwd() / "tests" / "assets" / "servers"
 
 
 @pytest.fixture
-def mock_client() -> Client:
+def mock_client() -> MagicMock:
     client = MagicMock(spec=Client)
     client.servers = Server.from_directory(SERVERS_PATH)
 

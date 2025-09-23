@@ -1,53 +1,46 @@
 import logging
+import os
 import re
 from datetime import datetime
-from typing import TYPE_CHECKING
 
 import discord
 
 from embed_splitter import EmbedSplitter
 from server import Server
 
-if TYPE_CHECKING:
-    from client.client import Client
-
-
 logger = logging.getLogger(__name__)
 
 
 class CommandController:
     EMBED_COLOUR = 0x2F3855
+    COMMAND_PREFIX = os.environ.get("QUANTUM_BOT_PREFIX", "!")
     COMMAND_SPLIT_REGEX = r"((?:[^\s\"']+)|\"(?:\\.|[^\"])*\"|'(?:\\.|[^'])*')"
     QUOTATION_REMOVAL_REGEX = r"(^[\"']|[\"']$)"
 
-    def __init__(self, client: "Client") -> None:
-        self.client = client
+    @classmethod
+    def is_command(cls, message: discord.Message) -> bool:
+        return message.content.startswith(cls.COMMAND_PREFIX)
 
-    async def reply(self, message: discord.Message) -> None:
-        if message.guild is None:
-            logger.warning("Message guild not found")
-            return
-
-        if (server := self.client.servers.get(message.guild.id)) is None:
-            logger.error("Server %s not found", message.guild.id)
-            return
-
+    @classmethod
+    async def reply(cls, message: discord.Message, server: Server) -> None:
         command = [
-            re.sub(self.QUOTATION_REMOVAL_REGEX, "", arg)
-            for arg in re.findall(self.COMMAND_SPLIT_REGEX, message.content[1:])
+            re.sub(cls.QUOTATION_REMOVAL_REGEX, "", arg)
+            for arg in re.findall(cls.COMMAND_SPLIT_REGEX, message.content[1:])
         ]
 
         match command[0].lower():
             case "test":
-                await self._reply_test(message, server)
+                await cls._reply_test(message, server)
             case "schedule":
-                await self._reply_schedule(message, server, command)
+                await cls._reply_schedule(message, server, command)
 
-    async def _reply_test(self, message: discord.Message, server: Server) -> None:
+    @classmethod
+    async def _reply_test(cls, message: discord.Message, server: Server) -> None:
         await message.channel.send(server.language.config.message.test)
 
+    @classmethod
     async def _reply_schedule(
-        self, message: discord.Message, server: Server, command: list[str]
+        cls, message: discord.Message, server: Server, command: list[str]
     ) -> None:
         is_full_schedule = len(command) > 1 and command[1].lower() in {"full", "all"}
 
@@ -62,7 +55,7 @@ class CommandController:
 
         embed = discord.Embed(
             title=f"{schedule_title_prefix} - {server.name}",
-            color=self.EMBED_COLOUR,
+            color=cls.EMBED_COLOUR,
         )
 
         for embed in EmbedSplitter(embed, list(fields), server.HEADER_PREFIX):
