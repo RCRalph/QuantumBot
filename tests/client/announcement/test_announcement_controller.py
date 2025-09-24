@@ -100,10 +100,10 @@ class TestAnnouncementController:
         # Assert
         assert all(message in caplog.text for message in expected_log_messages)
 
-        assert mock_announcement_client.get_channel.call_count == 2  # type: ignore
-        mock_announcement_client.get_channel.assert_has_calls(  # type: ignore
-            [call(54321), call(1234567890)], any_order=True
-        )
+        assert sorted(mock_announcement_client.get_channel.call_args_list) == [  # type: ignore
+            call(54321),
+            call(1234567890),
+        ]
 
         assert mock_channel.send.await_count == 2
         mock_channel.send.assert_has_awaits(

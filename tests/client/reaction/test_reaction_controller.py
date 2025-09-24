@@ -54,7 +54,6 @@ class TestReactionController:
         await ReactionController.add_reactions(mock_message, example_server)
 
         # Assert
-        assert mock_message.add_reaction.call_count == 3
-        mock_message.add_reaction.assert_has_awaits(
-            [call(item) for item in ["🌕", "🌘", "⏲️"]]
-        )
+        assert mock_message.add_reaction.await_args_list == [
+            call(item) for item in ["🌕", "🌘", "⏲️"]
+        ]

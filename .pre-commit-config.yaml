@@ -34,5 +34,8 @@ repos:
     rev: v1.17.1
     hooks:
       - id: mypy
+        entry: mypy .
         args: [--check-untyped-defs]
         additional_dependencies: [pydantic, discord, types-freezegun, pytest-mypy-plugins]
+        always_run: true
+        pass_filenames: false
