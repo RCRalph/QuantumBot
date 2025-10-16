@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from discord import Intents
 
 from client import Client
-from main import main
+from run_bot import main
 
 EXAMPLE_TOKEN = "Some token"
 

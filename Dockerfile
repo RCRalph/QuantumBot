@@ -11,8 +11,8 @@ RUN pip install .
 
 FROM base AS bot
 
-CMD ["python", "src/main.py"]
+CMD ["python", "src/run_bot.py"]
 
 FROM base AS announcement
 
-CMD ["python", "src/announcement.py"]
+CMD ["python", "src/run_announcement.py"]

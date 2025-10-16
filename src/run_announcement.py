@@ -13,10 +13,10 @@ logging.basicConfig(
 )
 
 
-def announcement() -> None:
+def main() -> None:
     client = AnnouncementClient(intents=discord.Intents().default())
     client.run(os.environ["BOT_TOKEN"])
 
 
 if __name__ == "__main__":
-    announcement()  # pragma: no cover
+    main()  # pragma: no cover
