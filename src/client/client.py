@@ -1,9 +1,7 @@
 import logging
 
-import aiocron
 import discord
 
-from client.announcement import AnnouncementController
 from client.command import CommandController
 from client.reaction import ReactionController
 from server import Server
@@ -16,11 +14,6 @@ class Client(discord.Client):
         logger.info("Logged in as %s", self.user)
 
         self.servers = Server.from_directory()
-
-        self._announcement_controller = AnnouncementController(self)
-        self._announcement_cron = aiocron.crontab(
-            "* * * * *", self._announcement_controller.send_announcements
-        )
 
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user:

@@ -16,21 +16,21 @@
   "timezones": [
     "UTC"
   ],
-    "schedule": [
-        {
-            "title": "",
-            "description": "",
-            "start": "1970-01-01 00:00",
-            "end": "1970-01-01 23:59",
-            "announcements": [10]
-        }
-    ],
-    "deadlines": [
-        {
-            "title": "",
-            "description": "",
-            "time": "1970-01-01 00:00",
-            "announcements": [600, 300, 120]
-        }
-    ]
+  "schedule": [
+    {
+      "title": "",
+      "description": "",
+      "start": "1970-01-01 00:00",
+      "end": "1970-01-01 23:59",
+      "announcements": [10]
+    }
+  ],
+  "deadlines": [
+    {
+      "title": "",
+      "description": "",
+      "time": "1970-01-01 00:00",
+      "announcements": [600, 300, 120]
+    }
+  ]
 }
