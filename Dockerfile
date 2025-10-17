@@ -1,4 +1,4 @@
-FROM python:3.13.2-slim AS base
+FROM python:3.13.2-slim
 
 WORKDIR /app
 
@@ -9,10 +9,4 @@ COPY ./src ./src
 
 RUN pip install .
 
-FROM base AS bot
-
 CMD ["python", "src/run_bot.py"]
-
-FROM base AS announcement
-
-CMD ["python", "src/run_announcement.py"]

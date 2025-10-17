@@ -2,9 +2,7 @@ services:
   client:
     image: quantum-bot
     container_name: quantum-bot
-    build:
-      context: .
-      target: bot
+    build: .
     environment:
       - BOT_PREFIX=${BOT_PREFIX}
       - BOT_TOKEN=${BOT_TOKEN}
@@ -12,11 +10,10 @@ services:
       - ${LOCAL_CONFIG_DIRECTORY_PATH}:/app/config
 
   announcement:
-    image: quantum-bot-announcement
+    image: quantum-bot
     container_name: quantum-bot-announcement
-    build:
-      context: .
-      target: announcement
+    build: .
+    command: python3 src/run_announcement.py
     environment:
       - BOT_PREFIX=${BOT_PREFIX}
       - BOT_TOKEN=${BOT_TOKEN}
