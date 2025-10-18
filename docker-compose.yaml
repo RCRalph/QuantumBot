@@ -1,21 +1,18 @@
+x-common-service: &quantum-bot-base
+  image: quantum-bot
+  build: .
+  environment:
+    - BOT_PREFIX=${BOT_PREFIX}
+    - BOT_TOKEN=${BOT_TOKEN}
+  volumes:
+    - ${LOCAL_CONFIG_DIRECTORY_PATH}:/app/config
+
 services:
   client:
-    image: quantum-bot
+    <<: *quantum-bot-base
     container_name: quantum-bot
-    build: .
-    environment:
-      - BOT_PREFIX=${BOT_PREFIX}
-      - BOT_TOKEN=${BOT_TOKEN}
-    volumes:
-      - ${LOCAL_CONFIG_DIRECTORY_PATH}:/app/config
 
   announcement:
-    image: quantum-bot
+    <<: *quantum-bot-base
     container_name: quantum-bot-announcement
-    build: .
     command: python src/run_announcement.py
-    environment:
-      - BOT_PREFIX=${BOT_PREFIX}
-      - BOT_TOKEN=${BOT_TOKEN}
-    volumes:
-      - ${LOCAL_CONFIG_DIRECTORY_PATH}:/app/config
