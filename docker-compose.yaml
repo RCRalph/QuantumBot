@@ -1,6 +1,7 @@
 x-common-service: &quantum-bot-base
   image: quantum-bot
   build: .
+  restart: unless-stopped
   environment:
     - BOT_PREFIX=${BOT_PREFIX}
     - BOT_TOKEN=${BOT_TOKEN}
